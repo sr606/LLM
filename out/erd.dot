@@ -1,0 +1,32 @@
+digraph ERD {
+  rankdir=LR;
+  node [shape=record, fontname=Helvetica];
+
+  "customers-100" [label="{customers-100|}"];
+  "customers-100_phone_list" [label="{customers-100_phone_list|Index\lorig_col\lphone\l}"];
+  "Customer Id_dim" [label="{Customer Id_dim|Customer Id (PK)\lCity\lCompany\lCountry\lEmail\lFirst Name\lIndex\lLast Name\lPhone 1\lPhone 2\lSubscription Date\lWebsite\l}"];
+  "City_dim" [label="{City_dim|City (PK)\lCompany\lCountry\lCustomer Id\lEmail\lFirst Name\lIndex\lLast Name\lPhone 1\lPhone 2\lSubscription Date\lWebsite\l}"];
+  "Phone 1_dim" [label="{Phone 1_dim|Phone 1 (PK)\lCity\lCompany\lCountry\lCustomer Id\lEmail\lFirst Name\lIndex\lLast Name\lPhone 2\lSubscription Date\lWebsite\l}"];
+  "Phone 2_dim" [label="{Phone 2_dim|Phone 2 (PK)\lCity\lCompany\lCountry\lCustomer Id\lEmail\lFirst Name\lIndex\lLast Name\lPhone 1\lSubscription Date\lWebsite\l}"];
+  "Email_dim" [label="{Email_dim|Email (PK)\lDate of birth\lFirst Name\lIndex\lJob Title\lLast Name\lPhone\lSex\lUser Id\l}"];
+  "Website_dim" [label="{Website_dim|Website (PK)\lCountry\lDescription\lFounded\lIndex\lIndustry\lName\lNumber of employees\lOrganization Id\l}"];
+  "customers-1000" [label="{customers-1000|}"];
+  "customers-1000_phone_list" [label="{customers-1000_phone_list|Index\lorig_col\lphone\l}"];
+  "customers-10000" [label="{customers-10000|}"];
+  "customers-10000_phone_list" [label="{customers-10000_phone_list|Index\lorig_col\lphone\l}"];
+  "organizations-100" [label="{organizations-100|}"];
+  "Organization Id_dim" [label="{Organization Id_dim|Organization Id (PK)\lCountry\lDescription\lFounded\lIndex\lIndustry\lName\lNumber of employees\lWebsite\l}"];
+  "Name_dim" [label="{Name_dim|Name (PK)\lCountry\lDescription\lFounded\lIndex\lIndustry\lNumber of employees\lOrganization Id\lWebsite\l}"];
+  "Description_dim" [label="{Description_dim|Description (PK)\lCountry\lFounded\lIndex\lIndustry\lName\lNumber of employees\lOrganization Id\lWebsite\l}"];
+  "Number of employees_dim" [label="{Number of employees_dim|Number of employees (PK)\lCountry\lDescription\lFounded\lIndex\lIndustry\lName\lOrganization Id\lWebsite\l}"];
+  "organizations-1000" [label="{organizations-1000|}"];
+  "people-100" [label="{people-100|}"];
+  "User Id_dim" [label="{User Id_dim|User Id (PK)\lDate of birth\lEmail\lFirst Name\lIndex\lJob Title\lLast Name\lPhone\lSex\l}"];
+  "Phone_dim" [label="{Phone_dim|Phone (PK)\lDate of birth\lEmail\lFirst Name\lIndex\lJob Title\lLast Name\lSex\lUser Id\l}"];
+  "Date of birth_dim" [label="{Date of birth_dim|Date of birth (PK)\lEmail\lFirst Name\lIndex\lJob Title\lLast Name\lPhone\lSex\lUser Id\l}"];
+  "people-1000" [label="{people-1000|}"];
+
+  "customers-100_phone_list" -> "customers-100" [label="Index"];
+  "customers-1000_phone_list" -> "customers-1000" [label="Index"];
+  "customers-10000_phone_list" -> "customers-10000" [label="Index"];
+}

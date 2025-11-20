@@ -36,4 +36,4 @@ dist/
 *.sqlite3
 
 # Output and generated artifacts
-out/
+# NOTE: `out/` removed from ignore to allow tracking generated artifacts when requested

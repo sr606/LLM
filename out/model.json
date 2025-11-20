@@ -1,0 +1,826 @@
+{
+  "tables": {
+    "customers-100": {
+      "primary_key": "Index",
+      "columns": {}
+    },
+    "customers-100_phone_list": {
+      "primary_key": null,
+      "columns": {
+        "Index": {
+          "type": "INTEGER",
+          "description": "Column `Index` of table `customers-100`. Type guess: INTEGER. Samples: ['1', '2', '3', '4', '5']",
+          "is_primary": false
+        },
+        "orig_col": {
+          "type": "TEXT",
+          "description": null,
+          "is_primary": false
+        },
+        "phone": {
+          "type": "TEXT",
+          "description": null,
+          "is_primary": false
+        }
+      }
+    },
+    "Customer Id_dim": {
+      "primary_key": "Customer Id",
+      "columns": {
+        "Customer Id": {
+          "type": "TEXT",
+          "description": "Column `Customer Id` of table `customers-10000`. Type guess: TEXT. Samples: ['EB54EF1154C3A78', '10dAcafEBbA5FcA', '67DAB15Ebe4BE4a', '6d350C5E5eDB4EE', '5820deAdCF23EFe']",
+          "is_primary": true
+        },
+        "City": {
+          "type": "TEXT",
+          "description": "Column `City` of table `customers-10000`. Type guess: TEXT. Samples: ['Lake Jeffborough', 'Aaronville', 'East Jordan', 'East Kristintown', 'Andresmouth']",
+          "is_primary": false
+        },
+        "Company": {
+          "type": "TEXT",
+          "description": "Column `Company` of table `customers-10000`. Type guess: TEXT. Samples: ['Mosley-David', 'Horn, Shepard and Watson', 'Irwin-Oneal', 'Richardson Group', 'Carson-Burch']",
+          "is_primary": false
+        },
+        "Country": {
+          "type": "TEXT",
+          "description": "Numeric measure.",
+          "is_primary": false
+        },
+        "Email": {
+          "type": "TEXT",
+          "description": "Column `Email` of table `customers-10000`. Type guess: TEXT. Samples: ['urangel@espinoza-francis.net', 'xreese@hall-donovan.com', 'haleybraun@blevins-sexton.com', 'hohailey@anthony.com', 'alvaradojesse@rangel-shields.com']",
+          "is_primary": false
+        },
+        "First Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Index": {
+          "type": "INTEGER",
+          "description": "Column `Index` of table `customers-10000`. Type guess: INTEGER. Samples: ['1', '2', '3', '4', '5']",
+          "is_primary": false
+        },
+        "Last Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Phone 1": {
+          "type": "TEXT",
+          "description": "Column `Phone 1` of table `customers-10000`. Type guess: TEXT. Samples: ['043-797-5229', '932-062-1802', '8352752061', '302.398.3833', '001-184-153-9683x1497']",
+          "is_primary": false
+        },
+        "Phone 2": {
+          "type": "TEXT",
+          "description": "Column `Phone 2` of table `customers-10000`. Type guess: TEXT. Samples: ['915.112.1727', '(209)172-7124x3651', '(567)135-1918', '196-189-7767x770', '552.051.2979x342']",
+          "is_primary": false
+        },
+        "Subscription Date": {
+          "type": "TEXT",
+          "description": "Date or timestamp value.",
+          "is_primary": false
+        },
+        "Website": {
+          "type": "TEXT",
+          "description": "Column `Website` of table `customers-10000`. Type guess: TEXT. Samples: ['http://www.escobar.org/', 'https://tyler-pugh.info/', 'https://www.mack-bell.net/', 'https://delacruz-freeman.org/', 'https://welch.info/']",
+          "is_primary": false
+        }
+      }
+    },
+    "City_dim": {
+      "primary_key": "City",
+      "columns": {
+        "City": {
+          "type": "TEXT",
+          "description": "Column `City` of table `customers-100`. Type guess: TEXT. Samples: ['East Leonard', 'East Jimmychester', 'Isabelborough', 'Bensonview', 'West Priscilla']",
+          "is_primary": true
+        },
+        "Company": {
+          "type": "TEXT",
+          "description": "Column `Company` of table `customers-100`. Type guess: TEXT. Samples: ['Rasmussen Group', 'Vega-Gentry', 'Murillo-Perry', 'Dominguez, Mcmillan and Donovan', 'Martin, Lang and Andrade']",
+          "is_primary": false
+        },
+        "Country": {
+          "type": "TEXT",
+          "description": "Numeric measure.",
+          "is_primary": false
+        },
+        "Customer Id": {
+          "type": "TEXT",
+          "description": "Column `Customer Id` of table `customers-100`. Type guess: TEXT. Samples: ['DD37Cf93aecA6Dc', '1Ef7b82A4CAAD10', '6F94879bDAfE5a6', '5Cef8BFA16c5e3c', '053d585Ab6b3159']",
+          "is_primary": false
+        },
+        "Email": {
+          "type": "TEXT",
+          "description": "Column `Email` of table `customers-100`. Type guess: TEXT. Samples: ['zunigavanessa@smith.info', 'vmata@colon.com', 'beckycarr@hogan.com', 'stanleyblackwell@benson.org', 'colinalvarado@miles.net']",
+          "is_primary": false
+        },
+        "First Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Index": {
+          "type": "INTEGER",
+          "description": "Column `Index` of table `customers-100`. Type guess: INTEGER. Samples: ['1', '2', '3', '4', '5']",
+          "is_primary": false
+        },
+        "Last Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Phone 1": {
+          "type": "TEXT",
+          "description": "Column `Phone 1` of table `customers-100`. Type guess: TEXT. Samples: ['229.077.5154', '5153435776', '+1-539-402-0259', '001-808-617-6467x12895', '001-234-203-0635x76146']",
+          "is_primary": false
+        },
+        "Phone 2": {
+          "type": "TEXT",
+          "description": "Column `Phone 2` of table `customers-100`. Type guess: TEXT. Samples: ['397.884.0519x718', '686-620-1820x944', '(496)978-3969x58947', '+1-813-324-8756', '001-199-446-3860x3486']",
+          "is_primary": false
+        },
+        "Subscription Date": {
+          "type": "TEXT",
+          "description": "Date or timestamp value.",
+          "is_primary": false
+        },
+        "Website": {
+          "type": "TEXT",
+          "description": "Column `Website` of table `customers-100`. Type guess: TEXT. Samples: ['http://www.stephenson.com/', 'http://www.hobbs.com/', 'http://www.lawrence.com/', 'http://www.good-lyons.com/', 'https://goodwin-ingram.com/']",
+          "is_primary": false
+        }
+      }
+    },
+    "Phone 1_dim": {
+      "primary_key": "Phone 1",
+      "columns": {
+        "Phone 1": {
+          "type": "TEXT",
+          "description": "Column `Phone 1` of table `customers-10000`. Type guess: TEXT. Samples: ['043-797-5229', '932-062-1802', '8352752061', '302.398.3833', '001-184-153-9683x1497']",
+          "is_primary": true
+        },
+        "City": {
+          "type": "TEXT",
+          "description": "Column `City` of table `customers-10000`. Type guess: TEXT. Samples: ['Lake Jeffborough', 'Aaronville', 'East Jordan', 'East Kristintown', 'Andresmouth']",
+          "is_primary": false
+        },
+        "Company": {
+          "type": "TEXT",
+          "description": "Column `Company` of table `customers-10000`. Type guess: TEXT. Samples: ['Mosley-David', 'Horn, Shepard and Watson', 'Irwin-Oneal', 'Richardson Group', 'Carson-Burch']",
+          "is_primary": false
+        },
+        "Country": {
+          "type": "TEXT",
+          "description": "Numeric measure.",
+          "is_primary": false
+        },
+        "Customer Id": {
+          "type": "TEXT",
+          "description": "Column `Customer Id` of table `customers-10000`. Type guess: TEXT. Samples: ['EB54EF1154C3A78', '10dAcafEBbA5FcA', '67DAB15Ebe4BE4a', '6d350C5E5eDB4EE', '5820deAdCF23EFe']",
+          "is_primary": false
+        },
+        "Email": {
+          "type": "TEXT",
+          "description": "Column `Email` of table `customers-10000`. Type guess: TEXT. Samples: ['urangel@espinoza-francis.net', 'xreese@hall-donovan.com', 'haleybraun@blevins-sexton.com', 'hohailey@anthony.com', 'alvaradojesse@rangel-shields.com']",
+          "is_primary": false
+        },
+        "First Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Index": {
+          "type": "INTEGER",
+          "description": "Column `Index` of table `customers-10000`. Type guess: INTEGER. Samples: ['1', '2', '3', '4', '5']",
+          "is_primary": false
+        },
+        "Last Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Phone 2": {
+          "type": "TEXT",
+          "description": "Column `Phone 2` of table `customers-10000`. Type guess: TEXT. Samples: ['915.112.1727', '(209)172-7124x3651', '(567)135-1918', '196-189-7767x770', '552.051.2979x342']",
+          "is_primary": false
+        },
+        "Subscription Date": {
+          "type": "TEXT",
+          "description": "Date or timestamp value.",
+          "is_primary": false
+        },
+        "Website": {
+          "type": "TEXT",
+          "description": "Column `Website` of table `customers-10000`. Type guess: TEXT. Samples: ['http://www.escobar.org/', 'https://tyler-pugh.info/', 'https://www.mack-bell.net/', 'https://delacruz-freeman.org/', 'https://welch.info/']",
+          "is_primary": false
+        }
+      }
+    },
+    "Phone 2_dim": {
+      "primary_key": "Phone 2",
+      "columns": {
+        "Phone 2": {
+          "type": "TEXT",
+          "description": "Column `Phone 2` of table `customers-10000`. Type guess: TEXT. Samples: ['915.112.1727', '(209)172-7124x3651', '(567)135-1918', '196-189-7767x770', '552.051.2979x342']",
+          "is_primary": true
+        },
+        "City": {
+          "type": "TEXT",
+          "description": "Column `City` of table `customers-10000`. Type guess: TEXT. Samples: ['Lake Jeffborough', 'Aaronville', 'East Jordan', 'East Kristintown', 'Andresmouth']",
+          "is_primary": false
+        },
+        "Company": {
+          "type": "TEXT",
+          "description": "Column `Company` of table `customers-10000`. Type guess: TEXT. Samples: ['Mosley-David', 'Horn, Shepard and Watson', 'Irwin-Oneal', 'Richardson Group', 'Carson-Burch']",
+          "is_primary": false
+        },
+        "Country": {
+          "type": "TEXT",
+          "description": "Numeric measure.",
+          "is_primary": false
+        },
+        "Customer Id": {
+          "type": "TEXT",
+          "description": "Column `Customer Id` of table `customers-10000`. Type guess: TEXT. Samples: ['EB54EF1154C3A78', '10dAcafEBbA5FcA', '67DAB15Ebe4BE4a', '6d350C5E5eDB4EE', '5820deAdCF23EFe']",
+          "is_primary": false
+        },
+        "Email": {
+          "type": "TEXT",
+          "description": "Column `Email` of table `customers-10000`. Type guess: TEXT. Samples: ['urangel@espinoza-francis.net', 'xreese@hall-donovan.com', 'haleybraun@blevins-sexton.com', 'hohailey@anthony.com', 'alvaradojesse@rangel-shields.com']",
+          "is_primary": false
+        },
+        "First Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Index": {
+          "type": "INTEGER",
+          "description": "Column `Index` of table `customers-10000`. Type guess: INTEGER. Samples: ['1', '2', '3', '4', '5']",
+          "is_primary": false
+        },
+        "Last Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Phone 1": {
+          "type": "TEXT",
+          "description": "Column `Phone 1` of table `customers-10000`. Type guess: TEXT. Samples: ['043-797-5229', '932-062-1802', '8352752061', '302.398.3833', '001-184-153-9683x1497']",
+          "is_primary": false
+        },
+        "Subscription Date": {
+          "type": "TEXT",
+          "description": "Date or timestamp value.",
+          "is_primary": false
+        },
+        "Website": {
+          "type": "TEXT",
+          "description": "Column `Website` of table `customers-10000`. Type guess: TEXT. Samples: ['http://www.escobar.org/', 'https://tyler-pugh.info/', 'https://www.mack-bell.net/', 'https://delacruz-freeman.org/', 'https://welch.info/']",
+          "is_primary": false
+        }
+      }
+    },
+    "Email_dim": {
+      "primary_key": "Email",
+      "columns": {
+        "Email": {
+          "type": "TEXT",
+          "description": "Column `Email` of table `people-1000`. Type guess: TEXT. Samples: ['pwarner@example.org', 'fergusonkatherine@example.net', 'fhoward@example.org', 'zjohnston@example.com', 'elin@example.net']",
+          "is_primary": true
+        },
+        "Date of birth": {
+          "type": "TEXT",
+          "description": "Date or timestamp value.",
+          "is_primary": false
+        },
+        "First Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Index": {
+          "type": "INTEGER",
+          "description": "Column `Index` of table `people-1000`. Type guess: INTEGER. Samples: ['1', '2', '3', '4', '5']",
+          "is_primary": false
+        },
+        "Job Title": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Last Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Phone": {
+          "type": "TEXT",
+          "description": "Column `Phone` of table `people-1000`. Type guess: TEXT. Samples: ['857.139.8239', '+1-950-759-8687', '(599)782-0605', '+1-939-130-6258', '(390)417-1635x3010']",
+          "is_primary": false
+        },
+        "Sex": {
+          "type": "TEXT",
+          "description": "Column `Sex` of table `people-1000`. Type guess: TEXT. Samples: ['Male', 'Female', 'Female', 'Male', 'Female']",
+          "is_primary": false
+        },
+        "User Id": {
+          "type": "TEXT",
+          "description": "Column `User Id` of table `people-1000`. Type guess: TEXT. Samples: ['8717bbf45cCDbEe', '3d5AD30A4cD38ed', '810Ce0F276Badec', 'BF2a889C00f0cE1', '9afFEafAe1CBBB9']",
+          "is_primary": false
+        }
+      }
+    },
+    "Website_dim": {
+      "primary_key": "Website",
+      "columns": {
+        "Website": {
+          "type": "TEXT",
+          "description": "Column `Website` of table `organizations-100`. Type guess: TEXT. Samples: ['https://price.net/', 'http://www.hall-buchanan.info/', 'http://sullivan-reed.com/', 'https://becker.com/', 'http://www.brewer.com/']",
+          "is_primary": true
+        },
+        "Country": {
+          "type": "TEXT",
+          "description": "Numeric measure.",
+          "is_primary": false
+        },
+        "Description": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Founded": {
+          "type": "INTEGER",
+          "description": "Column `Founded` of table `organizations-100`. Type guess: INTEGER. Samples: ['1990', '2015', '1971', '2004', '1991']",
+          "is_primary": false
+        },
+        "Index": {
+          "type": "INTEGER",
+          "description": "Column `Index` of table `organizations-100`. Type guess: INTEGER. Samples: ['1', '2', '3', '4', '5']",
+          "is_primary": false
+        },
+        "Industry": {
+          "type": "TEXT",
+          "description": "Column `Industry` of table `organizations-100`. Type guess: TEXT. Samples: ['Plastics', 'Glass / Ceramics / Concrete', 'Public Safety', 'Automotive', 'Transportation']",
+          "is_primary": false
+        },
+        "Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Number of employees": {
+          "type": "INTEGER",
+          "description": "Numeric measure.",
+          "is_primary": false
+        },
+        "Organization Id": {
+          "type": "TEXT",
+          "description": "Column `Organization Id` of table `organizations-100`. Type guess: TEXT. Samples: ['FAB0d41d5b5d22c', '6A7EdDEA9FaDC52', '0bFED1ADAE4bcC1', '2bFC1Be8a4ce42f', '9eE8A6a4Eb96C24']",
+          "is_primary": false
+        }
+      }
+    },
+    "customers-1000": {
+      "primary_key": "Index",
+      "columns": {}
+    },
+    "customers-1000_phone_list": {
+      "primary_key": null,
+      "columns": {
+        "Index": {
+          "type": "INTEGER",
+          "description": "Column `Index` of table `customers-1000`. Type guess: INTEGER. Samples: ['1', '2', '3', '4', '5']",
+          "is_primary": false
+        },
+        "orig_col": {
+          "type": "TEXT",
+          "description": null,
+          "is_primary": false
+        },
+        "phone": {
+          "type": "TEXT",
+          "description": null,
+          "is_primary": false
+        }
+      }
+    },
+    "customers-10000": {
+      "primary_key": "Index",
+      "columns": {}
+    },
+    "customers-10000_phone_list": {
+      "primary_key": null,
+      "columns": {
+        "Index": {
+          "type": "INTEGER",
+          "description": "Column `Index` of table `customers-10000`. Type guess: INTEGER. Samples: ['1', '2', '3', '4', '5']",
+          "is_primary": false
+        },
+        "orig_col": {
+          "type": "TEXT",
+          "description": null,
+          "is_primary": false
+        },
+        "phone": {
+          "type": "TEXT",
+          "description": null,
+          "is_primary": false
+        }
+      }
+    },
+    "organizations-100": {
+      "primary_key": "Index",
+      "columns": {}
+    },
+    "Organization Id_dim": {
+      "primary_key": "Organization Id",
+      "columns": {
+        "Organization Id": {
+          "type": "TEXT",
+          "description": "Column `Organization Id` of table `organizations-1000`. Type guess: TEXT. Samples: ['E84A904909dF528', 'AAC4f9aBF86EAeF', 'ad2eb3C8C24DB87', 'D76BB12E5eE165B', '2F31EddF2Db9aAE']",
+          "is_primary": true
+        },
+        "Country": {
+          "type": "TEXT",
+          "description": "Numeric measure.",
+          "is_primary": false
+        },
+        "Description": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Founded": {
+          "type": "INTEGER",
+          "description": "Column `Founded` of table `organizations-1000`. Type guess: INTEGER. Samples: ['1980', '1970', '2005', '2015', '2010']",
+          "is_primary": false
+        },
+        "Index": {
+          "type": "INTEGER",
+          "description": "Column `Index` of table `organizations-1000`. Type guess: INTEGER. Samples: ['1', '2', '3', '4', '5']",
+          "is_primary": false
+        },
+        "Industry": {
+          "type": "TEXT",
+          "description": "Column `Industry` of table `organizations-1000`. Type guess: TEXT. Samples: ['Online Publishing', 'Import / Export', 'Apparel / Fashion', 'Dairy', 'Management Consulting']",
+          "is_primary": false
+        },
+        "Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Number of employees": {
+          "type": "INTEGER",
+          "description": "Numeric measure.",
+          "is_primary": false
+        },
+        "Website": {
+          "type": "TEXT",
+          "description": "Column `Website` of table `organizations-1000`. Type guess: TEXT. Samples: ['http://www.day-hartman.org/', 'https://www.chapman.net/', 'http://lin.com/', 'https://gillespie-stout.com/', 'https://kramer.com/']",
+          "is_primary": false
+        }
+      }
+    },
+    "Name_dim": {
+      "primary_key": "Name",
+      "columns": {
+        "Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": true
+        },
+        "Country": {
+          "type": "TEXT",
+          "description": "Numeric measure.",
+          "is_primary": false
+        },
+        "Description": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Founded": {
+          "type": "INTEGER",
+          "description": "Column `Founded` of table `organizations-100`. Type guess: INTEGER. Samples: ['1990', '2015', '1971', '2004', '1991']",
+          "is_primary": false
+        },
+        "Index": {
+          "type": "INTEGER",
+          "description": "Column `Index` of table `organizations-100`. Type guess: INTEGER. Samples: ['1', '2', '3', '4', '5']",
+          "is_primary": false
+        },
+        "Industry": {
+          "type": "TEXT",
+          "description": "Column `Industry` of table `organizations-100`. Type guess: TEXT. Samples: ['Plastics', 'Glass / Ceramics / Concrete', 'Public Safety', 'Automotive', 'Transportation']",
+          "is_primary": false
+        },
+        "Number of employees": {
+          "type": "INTEGER",
+          "description": "Numeric measure.",
+          "is_primary": false
+        },
+        "Organization Id": {
+          "type": "TEXT",
+          "description": "Column `Organization Id` of table `organizations-100`. Type guess: TEXT. Samples: ['FAB0d41d5b5d22c', '6A7EdDEA9FaDC52', '0bFED1ADAE4bcC1', '2bFC1Be8a4ce42f', '9eE8A6a4Eb96C24']",
+          "is_primary": false
+        },
+        "Website": {
+          "type": "TEXT",
+          "description": "Column `Website` of table `organizations-100`. Type guess: TEXT. Samples: ['https://price.net/', 'http://www.hall-buchanan.info/', 'http://sullivan-reed.com/', 'https://becker.com/', 'http://www.brewer.com/']",
+          "is_primary": false
+        }
+      }
+    },
+    "Description_dim": {
+      "primary_key": "Description",
+      "columns": {
+        "Description": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": true
+        },
+        "Country": {
+          "type": "TEXT",
+          "description": "Numeric measure.",
+          "is_primary": false
+        },
+        "Founded": {
+          "type": "INTEGER",
+          "description": "Column `Founded` of table `organizations-1000`. Type guess: INTEGER. Samples: ['1980', '1970', '2005', '2015', '2010']",
+          "is_primary": false
+        },
+        "Index": {
+          "type": "INTEGER",
+          "description": "Column `Index` of table `organizations-1000`. Type guess: INTEGER. Samples: ['1', '2', '3', '4', '5']",
+          "is_primary": false
+        },
+        "Industry": {
+          "type": "TEXT",
+          "description": "Column `Industry` of table `organizations-1000`. Type guess: TEXT. Samples: ['Online Publishing', 'Import / Export', 'Apparel / Fashion', 'Dairy', 'Management Consulting']",
+          "is_primary": false
+        },
+        "Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Number of employees": {
+          "type": "INTEGER",
+          "description": "Numeric measure.",
+          "is_primary": false
+        },
+        "Organization Id": {
+          "type": "TEXT",
+          "description": "Column `Organization Id` of table `organizations-1000`. Type guess: TEXT. Samples: ['E84A904909dF528', 'AAC4f9aBF86EAeF', 'ad2eb3C8C24DB87', 'D76BB12E5eE165B', '2F31EddF2Db9aAE']",
+          "is_primary": false
+        },
+        "Website": {
+          "type": "TEXT",
+          "description": "Column `Website` of table `organizations-1000`. Type guess: TEXT. Samples: ['http://www.day-hartman.org/', 'https://www.chapman.net/', 'http://lin.com/', 'https://gillespie-stout.com/', 'https://kramer.com/']",
+          "is_primary": false
+        }
+      }
+    },
+    "Number of employees_dim": {
+      "primary_key": "Number of employees",
+      "columns": {
+        "Number of employees": {
+          "type": "INTEGER",
+          "description": "Numeric measure.",
+          "is_primary": true
+        },
+        "Country": {
+          "type": "TEXT",
+          "description": "Numeric measure.",
+          "is_primary": false
+        },
+        "Description": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Founded": {
+          "type": "INTEGER",
+          "description": "Column `Founded` of table `organizations-100`. Type guess: INTEGER. Samples: ['1990', '2015', '1971', '2004', '1991']",
+          "is_primary": false
+        },
+        "Index": {
+          "type": "INTEGER",
+          "description": "Column `Index` of table `organizations-100`. Type guess: INTEGER. Samples: ['1', '2', '3', '4', '5']",
+          "is_primary": false
+        },
+        "Industry": {
+          "type": "TEXT",
+          "description": "Column `Industry` of table `organizations-100`. Type guess: TEXT. Samples: ['Plastics', 'Glass / Ceramics / Concrete', 'Public Safety', 'Automotive', 'Transportation']",
+          "is_primary": false
+        },
+        "Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Organization Id": {
+          "type": "TEXT",
+          "description": "Column `Organization Id` of table `organizations-100`. Type guess: TEXT. Samples: ['FAB0d41d5b5d22c', '6A7EdDEA9FaDC52', '0bFED1ADAE4bcC1', '2bFC1Be8a4ce42f', '9eE8A6a4Eb96C24']",
+          "is_primary": false
+        },
+        "Website": {
+          "type": "TEXT",
+          "description": "Column `Website` of table `organizations-100`. Type guess: TEXT. Samples: ['https://price.net/', 'http://www.hall-buchanan.info/', 'http://sullivan-reed.com/', 'https://becker.com/', 'http://www.brewer.com/']",
+          "is_primary": false
+        }
+      }
+    },
+    "organizations-1000": {
+      "primary_key": "Index",
+      "columns": {}
+    },
+    "people-100": {
+      "primary_key": "Index",
+      "columns": {}
+    },
+    "User Id_dim": {
+      "primary_key": "User Id",
+      "columns": {
+        "User Id": {
+          "type": "TEXT",
+          "description": "Column `User Id` of table `people-1000`. Type guess: TEXT. Samples: ['8717bbf45cCDbEe', '3d5AD30A4cD38ed', '810Ce0F276Badec', 'BF2a889C00f0cE1', '9afFEafAe1CBBB9']",
+          "is_primary": true
+        },
+        "Date of birth": {
+          "type": "TEXT",
+          "description": "Date or timestamp value.",
+          "is_primary": false
+        },
+        "Email": {
+          "type": "TEXT",
+          "description": "Column `Email` of table `people-1000`. Type guess: TEXT. Samples: ['pwarner@example.org', 'fergusonkatherine@example.net', 'fhoward@example.org', 'zjohnston@example.com', 'elin@example.net']",
+          "is_primary": false
+        },
+        "First Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Index": {
+          "type": "INTEGER",
+          "description": "Column `Index` of table `people-1000`. Type guess: INTEGER. Samples: ['1', '2', '3', '4', '5']",
+          "is_primary": false
+        },
+        "Job Title": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Last Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Phone": {
+          "type": "TEXT",
+          "description": "Column `Phone` of table `people-1000`. Type guess: TEXT. Samples: ['857.139.8239', '+1-950-759-8687', '(599)782-0605', '+1-939-130-6258', '(390)417-1635x3010']",
+          "is_primary": false
+        },
+        "Sex": {
+          "type": "TEXT",
+          "description": "Column `Sex` of table `people-1000`. Type guess: TEXT. Samples: ['Male', 'Female', 'Female', 'Male', 'Female']",
+          "is_primary": false
+        }
+      }
+    },
+    "Phone_dim": {
+      "primary_key": "Phone",
+      "columns": {
+        "Phone": {
+          "type": "TEXT",
+          "description": "Column `Phone` of table `people-1000`. Type guess: TEXT. Samples: ['857.139.8239', '+1-950-759-8687', '(599)782-0605', '+1-939-130-6258', '(390)417-1635x3010']",
+          "is_primary": true
+        },
+        "Date of birth": {
+          "type": "TEXT",
+          "description": "Date or timestamp value.",
+          "is_primary": false
+        },
+        "Email": {
+          "type": "TEXT",
+          "description": "Column `Email` of table `people-1000`. Type guess: TEXT. Samples: ['pwarner@example.org', 'fergusonkatherine@example.net', 'fhoward@example.org', 'zjohnston@example.com', 'elin@example.net']",
+          "is_primary": false
+        },
+        "First Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Index": {
+          "type": "INTEGER",
+          "description": "Column `Index` of table `people-1000`. Type guess: INTEGER. Samples: ['1', '2', '3', '4', '5']",
+          "is_primary": false
+        },
+        "Job Title": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Last Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Sex": {
+          "type": "TEXT",
+          "description": "Column `Sex` of table `people-1000`. Type guess: TEXT. Samples: ['Male', 'Female', 'Female', 'Male', 'Female']",
+          "is_primary": false
+        },
+        "User Id": {
+          "type": "TEXT",
+          "description": "Column `User Id` of table `people-1000`. Type guess: TEXT. Samples: ['8717bbf45cCDbEe', '3d5AD30A4cD38ed', '810Ce0F276Badec', 'BF2a889C00f0cE1', '9afFEafAe1CBBB9']",
+          "is_primary": false
+        }
+      }
+    },
+    "Date of birth_dim": {
+      "primary_key": "Date of birth",
+      "columns": {
+        "Date of birth": {
+          "type": "TEXT",
+          "description": "Date or timestamp value.",
+          "is_primary": true
+        },
+        "Email": {
+          "type": "TEXT",
+          "description": "Column `Email` of table `people-100`. Type guess: TEXT. Samples: ['elijah57@example.net', 'bethany14@example.com', 'bthompson@example.com', 'kaitlinkaiser@example.com', 'buchananmanuel@example.net']",
+          "is_primary": false
+        },
+        "First Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Index": {
+          "type": "INTEGER",
+          "description": "Column `Index` of table `people-100`. Type guess: INTEGER. Samples: ['1', '2', '3', '4', '5']",
+          "is_primary": false
+        },
+        "Job Title": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Last Name": {
+          "type": "TEXT",
+          "description": "Textual descriptive field.",
+          "is_primary": false
+        },
+        "Phone": {
+          "type": "TEXT",
+          "description": "Column `Phone` of table `people-100`. Type guess: TEXT. Samples: ['001-084-906-7849x73518', '214.112.6044x4913', '277.609.7938', '584.094.6111', '689-207-3558x7233']",
+          "is_primary": false
+        },
+        "Sex": {
+          "type": "TEXT",
+          "description": "Column `Sex` of table `people-100`. Type guess: TEXT. Samples: ['Male', 'Female', 'Male', 'Male', 'Male']",
+          "is_primary": false
+        },
+        "User Id": {
+          "type": "TEXT",
+          "description": "Column `User Id` of table `people-100`. Type guess: TEXT. Samples: ['88F7B33d2bcf9f5', 'f90cD3E76f1A9b9', 'DbeAb8CcdfeFC2c', 'A31Bee3c201ef58', '1bA7A3dc874da3c']",
+          "is_primary": false
+        }
+      }
+    },
+    "people-1000": {
+      "primary_key": "Index",
+      "columns": {}
+    }
+  },
+  "foreign_keys": [
+    {
+      "table": "customers-100_phone_list",
+      "column": "Index",
+      "ref_table": "customers-100",
+      "ref_column": "Index"
+    },
+    {
+      "table": "customers-1000_phone_list",
+      "column": "Index",
+      "ref_table": "customers-1000",
+      "ref_column": "Index"
+    },
+    {
+      "table": "customers-10000_phone_list",
+      "column": "Index",
+      "ref_table": "customers-10000",
+      "ref_column": "Index"
+    }
+  ],
+  "_meta": {
+    "generated_by": "ModelLangGraph 3NF",
+    "langgraph_compatible": true
+  }
+}
