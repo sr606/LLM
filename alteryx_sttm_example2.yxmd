@@ -1,0 +1,770 @@
+<?xml version="1.0"?>
+<AlteryxDocument yxmdVer="2023.1">
+  <Nodes>
+    <!-- INPUT LAYER - Multiple Data Sources -->
+    
+    <!-- Input 1: Customer Segments from Stored Procedure -->
+    <Node ToolID="1">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput">
+        <Position x="54" y="54" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Passwords />
+          <Connection>Driver={SQL Server};Server=PROD_SERVER;Database=AnalyticsDB;Trusted_Connection=Yes;</Connection>
+          <TableName>CustomerSegments</TableName>
+          <SQL>EXEC dbo.usp_GetCustomerSegments @StartDate = '2024-01-01', @EndDate = '2024-12-31', @MinTransactions = 5, @SegmentType = 'Premium'</SQL>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Customer Segments SP</Name>
+          <DefaultAnnotationText>PROD_SERVER.AnalyticsDB
+usp_GetCustomerSegments</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+        <MetaInfo connection="Output">
+          <RecordInfo>
+            <Field name="CustomerID" size="50" source="(Multiple Sources)" type="V_String" />
+            <Field name="CustomerName" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="Email" size="255" source="(Multiple Sources)" type="V_String" />
+            <Field name="RegistrationDate" source="(Multiple Sources)" type="DateTime" />
+            <Field name="TransactionCount" source="(Multiple Sources)" type="Int32" />
+            <Field name="TotalSpent" source="(Multiple Sources)" type="Double" />
+            <Field name="AvgTransactionValue" source="(Multiple Sources)" type="Double" />
+            <Field name="CustomerSegment" size="50" source="(Multiple Sources)" type="V_String" />
+            <Field name="LastTransactionDate" source="(Multiple Sources)" type="DateTime" />
+          </RecordInfo>
+        </MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput" />
+    </Node>
+
+    <!-- Input 2: Product Performance from Stored Procedure -->
+    <Node ToolID="2">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput">
+        <Position x="54" y="162" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Passwords />
+          <Connection>Driver={SQL Server};Server=PROD_SERVER;Database=AnalyticsDB;Trusted_Connection=Yes;</Connection>
+          <TableName>ProductPerformance</TableName>
+          <SQL>EXEC dbo.usp_GetProductPerformance @StartDate = '2024-01-01', @EndDate = '2024-12-31', @MinQuantity = 50, @CategoryFilter = 'Electronics'</SQL>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Product Performance SP</Name>
+          <DefaultAnnotationText>PROD_SERVER.AnalyticsDB
+usp_GetProductPerformance</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+        <MetaInfo connection="Output">
+          <RecordInfo>
+            <Field name="ProductID" size="50" source="(Multiple Sources)" type="V_String" />
+            <Field name="ProductName" size="200" source="(Multiple Sources)" type="V_String" />
+            <Field name="Category" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="UnitPrice" source="(Multiple Sources)" type="Double" />
+            <Field name="OrderCount" source="(Multiple Sources)" type="Int32" />
+            <Field name="TotalQuantitySold" source="(Multiple Sources)" type="Int32" />
+            <Field name="TotalRevenue" source="(Multiple Sources)" type="Double" />
+            <Field name="AvgSellingPrice" source="(Multiple Sources)" type="Double" />
+            <Field name="UniqueCustomers" source="(Multiple Sources)" type="Int32" />
+            <Field name="LastOrderDate" source="(Multiple Sources)" type="DateTime" />
+          </RecordInfo>
+        </MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput" />
+    </Node>
+
+    <!-- Input 3: Sales Analytics from Stored Procedure -->
+    <Node ToolID="3">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput">
+        <Position x="54" y="270" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Passwords />
+          <Connection>Driver={SQL Server};Server=PROD_SERVER;Database=AnalyticsDB;Trusted_Connection=Yes;</Connection>
+          <TableName>SalesAnalytics</TableName>
+          <SQL>EXEC dbo.usp_GetSalesAnalytics @StartDate = '2024-01-01', @EndDate = '2024-12-31', @RegionFilter = 'North America', @MinSalesAmount = 100000</SQL>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Sales Analytics SP</Name>
+          <DefaultAnnotationText>PROD_SERVER.AnalyticsDB
+usp_GetSalesAnalytics</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+        <MetaInfo connection="Output">
+          <RecordInfo>
+            <Field name="RegionID" size="50" source="(Multiple Sources)" type="V_String" />
+            <Field name="RegionName" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="Country" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="TotalOrders" source="(Multiple Sources)" type="Int32" />
+            <Field name="UniqueCustomers" source="(Multiple Sources)" type="Int32" />
+            <Field name="TotalSalesAmount" source="(Multiple Sources)" type="Double" />
+            <Field name="AvgOrderValue" source="(Multiple Sources)" type="Double" />
+            <Field name="TotalUnitsSold" source="(Multiple Sources)" type="Int32" />
+            <Field name="UniqueProductsSold" source="(Multiple Sources)" type="Int32" />
+            <Field name="FirstOrderDate" source="(Multiple Sources)" type="DateTime" />
+            <Field name="LastOrderDate" source="(Multiple Sources)" type="DateTime" />
+            <Field name="PerformanceCategory" size="50" source="(Multiple Sources)" type="V_String" />
+          </RecordInfo>
+        </MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput" />
+    </Node>
+
+    <!-- Input 4: Inventory Status from Stored Procedure -->
+    <Node ToolID="4">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput">
+        <Position x="54" y="378" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Passwords />
+          <Connection>Driver={SQL Server};Server=PROD_SERVER;Database=AnalyticsDB;Trusted_Connection=Yes;</Connection>
+          <TableName>InventoryStatus</TableName>
+          <SQL>EXEC dbo.usp_GetInventoryStatus @WarehouseID = 1, @CategoryFilter = 'Electronics', @LowStockThreshold = 15, @ReorderLevel = 30</SQL>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Inventory Status SP</Name>
+          <DefaultAnnotationText>PROD_SERVER.AnalyticsDB
+usp_GetInventoryStatus</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+        <MetaInfo connection="Output">
+          <RecordInfo>
+            <Field name="ProductID" size="50" source="(Multiple Sources)" type="V_String" />
+            <Field name="ProductName" size="200" source="(Multiple Sources)" type="V_String" />
+            <Field name="Category" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="UnitPrice" source="(Multiple Sources)" type="Double" />
+            <Field name="WarehouseID" source="(Multiple Sources)" type="Int32" />
+            <Field name="WarehouseName" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="CurrentStock" source="(Multiple Sources)" type="Int32" />
+            <Field name="ReorderLevel" source="(Multiple Sources)" type="Int32" />
+            <Field name="MaxStockLevel" source="(Multiple Sources)" type="Int32" />
+            <Field name="StockStatus" size="50" source="(Multiple Sources)" type="V_String" />
+            <Field name="RecommendedReorderQuantity" source="(Multiple Sources)" type="Int32" />
+            <Field name="DaysSinceLastRestock" source="(Multiple Sources)" type="Int32" />
+          </RecordInfo>
+        </MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput" />
+    </Node>
+
+    <!-- Input 5: Customer Master Data from CSV -->
+    <Node ToolID="5">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput">
+        <Position x="54" y="486" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Passwords />
+          <File OutputFileName="" RecordLimit="" SearchSubDirs="False" FileFormat="0">\\SharedDrive\Data\Customer_Master_2024.csv</File>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Customer Master CSV</Name>
+          <DefaultAnnotationText>\\SharedDrive\Data\
+Customer_Master_2024.csv</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+        <MetaInfo connection="Output">
+          <RecordInfo>
+            <Field name="CustomerID" size="50" source="(Multiple Sources)" type="V_String" />
+            <Field name="FirstName" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="LastName" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="Email" size="255" source="(Multiple Sources)" type="V_String" />
+            <Field name="Phone" size="20" source="(Multiple Sources)" type="V_String" />
+            <Field name="Address" size="200" source="(Multiple Sources)" type="V_String" />
+            <Field name="City" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="State" size="50" source="(Multiple Sources)" type="V_String" />
+            <Field name="ZipCode" size="20" source="(Multiple Sources)" type="V_String" />
+            <Field name="Country" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="RegistrationDate" source="(Multiple Sources)" type="DateTime" />
+            <Field name="CustomerType" size="50" source="(Multiple Sources)" type="V_String" />
+            <Field name="CreditLimit" source="(Multiple Sources)" type="Double" />
+            <Field name="Active" source="(Multiple Sources)" type="Byte" />
+          </RecordInfo>
+        </MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput" />
+    </Node>
+
+    <!-- Input 6: Product Catalog from Excel -->
+    <Node ToolID="6">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput">
+        <Position x="54" y="594" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Passwords />
+          <File OutputFileName="" RecordLimit="" SearchSubDirs="False" FileFormat="1">\\SharedDrive\Data\Product_Catalog_2024.xlsx</File>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Product Catalog XLS</Name>
+          <DefaultAnnotationText>\\SharedDrive\Data\
+Product_Catalog_2024.xlsx</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+        <MetaInfo connection="Output">
+          <RecordInfo>
+            <Field name="ProductID" size="50" source="(Multiple Sources)" type="V_String" />
+            <Field name="ProductName" size="200" source="(Multiple Sources)" type="V_String" />
+            <Field name="Category" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="SubCategory" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="Brand" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="UnitPrice" source="(Multiple Sources)" type="Double" />
+            <Field name="Cost" source="(Multiple Sources)" type="Double" />
+            <Field name="Weight" source="(Multiple Sources)" type="Double" />
+            <Field name="Dimensions" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="SupplierID" size="50" source="(Multiple Sources)" type="V_String" />
+            <Field name="SupplierName" size="200" source="(Multiple Sources)" type="V_String" />
+            <Field name="LaunchDate" source="(Multiple Sources)" type="DateTime" />
+            <Field name="Discontinued" source="(Multiple Sources)" type="Byte" />
+          </RecordInfo>
+        </MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput" />
+    </Node>
+
+    <!-- PROCESSING LAYER -->
+    
+    <!-- Data Cleansing for Customer Segments -->
+    <Node ToolID="7">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DataCleansing.DataCleansing">
+        <Position x="270" y="54" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Cleansing>
+            <Field name="CustomerName" cleanse="True" />
+            <Field name="Email" cleanse="True" />
+          </Cleansing>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Clean Customer Data</Name>
+          <DefaultAnnotationText>Data Cleansing
+Customer Segments</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDataCleansing" />
+    </Node>
+
+    <!-- Formula for Customer Segments -->
+    <Node ToolID="8">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Formula.Formula">
+        <Position x="486" y="54" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Formula FieldName="CustomerValueScore" FieldType="Double" Size="8" Scale="2">
+            [TotalSpent] * 0.4 + [TransactionCount] * 0.3 + [AvgTransactionValue] * 0.3
+          </Formula>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Calculate Value Score</Name>
+          <DefaultAnnotationText>Formula
+Customer Value Score</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxFormula" />
+    </Node>
+
+    <!-- Auto Field for Product Performance -->
+    <Node ToolID="9">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.AutoField.AutoField">
+        <Position x="270" y="162" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <AutoField>
+            <Field name="UnitPrice" />
+            <Field name="TotalRevenue" />
+            <Field name="AvgSellingPrice" />
+          </AutoField>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Auto Field Product Data</Name>
+          <DefaultAnnotationText>Auto Field
+Product Performance</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxAutoField" />
+    </Node>
+
+    <!-- Formula for Product Performance -->
+    <Node ToolID="10">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Formula.Formula">
+        <Position x="486" y="162" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Formula FieldName="ProfitMargin" FieldType="Double" Size="8" Scale="4">
+            ([TotalRevenue] - ([TotalQuantitySold] * [UnitPrice] * 0.6)) / [TotalRevenue]
+          </Formula>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Calculate Profit Margin</Name>
+          <DefaultAnnotationText>Formula
+Profit Margin</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxFormula" />
+    </Node>
+
+    <!-- Filter for Sales Analytics -->
+    <Node ToolID="11">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Filter.Filter">
+        <Position x="270" y="270" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <FilterExpression>[PerformanceCategory] = "High Performance"</FilterExpression>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Filter High Performance</Name>
+          <DefaultAnnotationText>Filter
+High Performance Regions</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxFilter" />
+    </Node>
+
+    <!-- Sort for Inventory Status -->
+    <Node ToolID="12">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Sort.Sort">
+        <Position x="270" y="378" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Sort>
+            <Field name="StockStatus" order="Ascending" />
+            <Field name="CurrentStock" order="Ascending" />
+          </Sort>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Sort by Stock Status</Name>
+          <DefaultAnnotationText>Sort
+Stock Status Priority</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxSort" />
+    </Node>
+
+    <!-- JOIN LAYER -->
+    
+    <!-- Join Customer Segments with Customer Master -->
+    <Node ToolID="13">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Join.Join">
+        <Position x="702" y="108" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <JoinInfo>
+            <JoinType>Left</JoinType>
+            <JoinFields>
+              <JoinField>
+                <LeftField>CustomerID</LeftField>
+                <RightField>CustomerID</RightField>
+              </JoinField>
+            </JoinFields>
+          </JoinInfo>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Join Customer Data</Name>
+          <DefaultAnnotationText>Join
+Customer Segments + Master</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxJoin" />
+    </Node>
+
+    <!-- Join Product Performance with Product Catalog -->
+    <Node ToolID="14">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Join.Join">
+        <Position x="702" y="216" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <JoinInfo>
+            <JoinType>Left</JoinType>
+            <JoinFields>
+              <JoinField>
+                <LeftField>ProductID</LeftField>
+                <RightField>ProductID</RightField>
+              </JoinField>
+            </JoinFields>
+          </JoinInfo>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Join Product Data</Name>
+          <DefaultAnnotationText>Join
+Product Performance + Catalog</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxJoin" />
+    </Node>
+
+    <!-- Join Inventory with Product Catalog -->
+    <Node ToolID="15">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Join.Join">
+        <Position x="702" y="324" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <JoinInfo>
+            <JoinType>Left</JoinType>
+            <JoinFields>
+              <JoinField>
+                <LeftField>ProductID</LeftField>
+                <RightField>ProductID</RightField>
+              </JoinField>
+            </JoinFields>
+          </JoinInfo>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Join Inventory Data</Name>
+          <DefaultAnnotationText>Join
+Inventory + Product Catalog</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxJoin" />
+    </Node>
+
+    <!-- ANALYTICS LAYER -->
+    
+    <!-- Summarize Customer Analytics -->
+    <Node ToolID="16">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Summarize.Summarize">
+        <Position x="918" y="108" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Summarize>
+            <Field name="CustomerSegment" groupBy="True" />
+            <Field name="TotalSpent" action="Sum" />
+            <Field name="TransactionCount" action="Sum" />
+            <Field name="CustomerValueScore" action="Avg" />
+            <Field name="CustomerID" action="Count" />
+          </Summarize>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Customer Segment Summary</Name>
+          <DefaultAnnotationText>Summarize
+By Customer Segment</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxSummarize" />
+    </Node>
+
+    <!-- Summarize Product Analytics -->
+    <Node ToolID="17">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Summarize.Summarize">
+        <Position x="918" y="216" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Summarize>
+            <Field name="Category" groupBy="True" />
+            <Field name="TotalRevenue" action="Sum" />
+            <Field name="TotalQuantitySold" action="Sum" />
+            <Field name="ProfitMargin" action="Avg" />
+            <Field name="ProductID" action="Count" />
+          </Summarize>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Product Category Summary</Name>
+          <DefaultAnnotationText>Summarize
+By Product Category</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxSummarize" />
+    </Node>
+
+    <!-- Summarize Inventory Analytics -->
+    <Node ToolID="18">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Summarize.Summarize">
+        <Position x="918" y="324" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Summarize>
+            <Field name="StockStatus" groupBy="True" />
+            <Field name="CurrentStock" action="Sum" />
+            <Field name="RecommendedReorderQuantity" action="Sum" />
+            <Field name="UnitPrice" action="Avg" />
+            <Field name="ProductID" action="Count" />
+          </Summarize>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Inventory Status Summary</Name>
+          <DefaultAnnotationText>Summarize
+By Stock Status</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxSummarize" />
+    </Node>
+
+    <!-- OUTPUT LAYER -->
+    
+    <!-- Output 1: Customer Analytics to Database -->
+    <Node ToolID="19">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileOutput.DbFileOutput">
+        <Position x="1134" y="108" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Passwords />
+          <Connection>Driver={SQL Server};Server=PROD_SERVER;Database=AnalyticsDB;Trusted_Connection=Yes;</Connection>
+          <TableName>CustomerAnalyticsSummary</TableName>
+          <Mode>Append</Mode>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Customer Analytics DB</Name>
+          <DefaultAnnotationText>PROD_SERVER.AnalyticsDB
+CustomerAnalyticsSummary</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileOutput" />
+    </Node>
+
+    <!-- Output 2: Product Analytics to Excel -->
+    <Node ToolID="20">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileOutput.DbFileOutput">
+        <Position x="1134" y="216" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Passwords />
+          <File OutputFileName="\\SharedDrive\Reports\ProductAnalytics_2024.xlsx" RecordLimit="" SearchSubDirs="False" FileFormat="1" />
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Product Analytics XLS</Name>
+          <DefaultAnnotationText>\\SharedDrive\Reports\
+ProductAnalytics_2024.xlsx</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileOutput" />
+    </Node>
+
+    <!-- Output 3: Inventory Analytics to CSV -->
+    <Node ToolID="21">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileOutput.DbFileOutput">
+        <Position x="1134" y="324" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Passwords />
+          <File OutputFileName="\\SharedDrive\Reports\InventoryAnalytics_2024.csv" RecordLimit="" SearchSubDirs="False" FileFormat="0" />
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Inventory Analytics CSV</Name>
+          <DefaultAnnotationText>\\SharedDrive\Reports\
+InventoryAnalytics_2024.csv</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileOutput" />
+    </Node>
+
+    <!-- Output 4: Sales Analytics to Database -->
+    <Node ToolID="22">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileOutput.DbFileOutput">
+        <Position x="1134" y="432" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Passwords />
+          <Connection>Driver={SQL Server};Server=PROD_SERVER;Database=AnalyticsDB;Trusted_Connection=Yes;</Connection>
+          <TableName>SalesAnalyticsSummary</TableName>
+          <Mode>Append</Mode>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Sales Analytics DB</Name>
+          <DefaultAnnotationText>PROD_SERVER.AnalyticsDB
+SalesAnalyticsSummary</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileOutput" />
+    </Node>
+
+    <!-- Browse Tools for Data Quality -->
+    <Node ToolID="23">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.BrowseV2.BrowseV2">
+        <Position x="1350" y="108" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Browse>
+            <Field name="CustomerSegment" />
+            <Field name="TotalSpent" />
+            <Field name="CustomerValueScore" />
+          </Browse>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Browse Customer Data</Name>
+          <DefaultAnnotationText>Browse
+Customer Analytics</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxBrowseV2" />
+    </Node>
+
+    <Node ToolID="24">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.BrowseV2.BrowseV2">
+        <Position x="1350" y="216" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Browse>
+            <Field name="Category" />
+            <Field name="TotalRevenue" />
+            <Field name="ProfitMargin" />
+          </Browse>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Browse Product Data</Name>
+          <DefaultAnnotationText>Browse
+Product Analytics</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxBrowseV2" />
+    </Node>
+
+    <Node ToolID="25">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.BrowseV2.BrowseV2">
+        <Position x="1350" y="324" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Browse>
+            <Field name="StockStatus" />
+            <Field name="CurrentStock" />
+            <Field name="RecommendedReorderQuantity" />
+          </Browse>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Browse Inventory Data</Name>
+          <DefaultAnnotationText>Browse
+Inventory Analytics</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxBrowseV2" />
+    </Node>
+
+  </Nodes>
+  
+  <Connections>
+    <!-- Customer Segments Flow -->
+    <Connection>
+      <Origin ToolID="1" Connection="Output" />
+      <Destination ToolID="7" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="7" Connection="Output" />
+      <Destination ToolID="8" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="8" Connection="Output" />
+      <Destination ToolID="13" Connection="Left" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="5" Connection="Output" />
+      <Destination ToolID="13" Connection="Right" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="13" Connection="Join" />
+      <Destination ToolID="16" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="16" Connection="Output" />
+      <Destination ToolID="19" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="19" Connection="Output" />
+      <Destination ToolID="23" Connection="Input" />
+    </Connection>
+
+    <!-- Product Performance Flow -->
+    <Connection>
+      <Origin ToolID="2" Connection="Output" />
+      <Destination ToolID="9" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="9" Connection="Output" />
+      <Destination ToolID="10" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="10" Connection="Output" />
+      <Destination ToolID="14" Connection="Left" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="6" Connection="Output" />
+      <Destination ToolID="14" Connection="Right" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="14" Connection="Join" />
+      <Destination ToolID="17" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="17" Connection="Output" />
+      <Destination ToolID="20" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="20" Connection="Output" />
+      <Destination ToolID="24" Connection="Input" />
+    </Connection>
+
+    <!-- Sales Analytics Flow -->
+    <Connection>
+      <Origin ToolID="3" Connection="Output" />
+      <Destination ToolID="11" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="11" Connection="Output" />
+      <Destination ToolID="22" Connection="Input" />
+    </Connection>
+
+    <!-- Inventory Status Flow -->
+    <Connection>
+      <Origin ToolID="4" Connection="Output" />
+      <Destination ToolID="12" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="12" Connection="Output" />
+      <Destination ToolID="15" Connection="Left" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="6" Connection="Output" />
+      <Destination ToolID="15" Connection="Right" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="15" Connection="Join" />
+      <Destination ToolID="18" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="18" Connection="Output" />
+      <Destination ToolID="21" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="21" Connection="Output" />
+      <Destination ToolID="25" Connection="Input" />
+    </Connection>
+  </Connections>
+</AlteryxDocument>
