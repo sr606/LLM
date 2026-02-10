@@ -1,0 +1,884 @@
+<?xml version="1.0"?>
+<AlteryxDocument yxmdVer="2023.1">
+  <Nodes>
+    <!-- INPUT LAYER -->
+    
+    <!-- Input 1: Customer Master Data from SQL Server -->
+    <Node ToolID="1">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput">
+        <Position x="54" y="54" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Passwords />
+          <Connection>Driver={SQL Server};Server=PROD_SERVER;Database=CustomerDB;Trusted_Connection=Yes;</Connection>
+          <TableName>dbo.CUSTOMERS</TableName>
+          <SQL>SELECT CustomerID, FirstName, LastName, Email, Gender, DateOfBirth, RegistrationDate, City, State, ZipCode FROM dbo.CUSTOMERS WHERE Active = 1</SQL>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Customer Master</Name>
+          <DefaultAnnotationText>PROD_SERVER.CustomerDB
+dbo.CUSTOMERS</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+        <MetaInfo connection="Output">
+          <RecordInfo>
+            <Field name="CustomerID" size="50" source="(Multiple Sources)" type="V_String" />
+            <Field name="FirstName" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="LastName" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="Email" size="255" source="(Multiple Sources)" type="V_String" />
+            <Field name="Gender" size="10" source="(Multiple Sources)" type="V_String" />
+            <Field name="DateOfBirth" source="(Multiple Sources)" type="Date" />
+            <Field name="RegistrationDate" source="(Multiple Sources)" type="DateTime" />
+            <Field name="City" size="100" source="(Multiple Sources)" type="V_String" />
+            <Field name="State" size="50" source="(Multiple Sources)" type="V_String" />
+            <Field name="ZipCode" size="20" source="(Multiple Sources)" type="V_String" />
+          </RecordInfo>
+        </MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput" />
+    </Node>
+
+    <!-- Input 2: Transaction Data from CSV -->
+    <Node ToolID="2">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput">
+        <Position x="54" y="162" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Passwords />
+          <File OutputFileName="" RecordLimit="" SearchSubDirs="False" FileFormat="0">\\SharedDrive\Sales\Transactions_2024.csv</File>
+          <FormatSpecificOptions>
+            <HeaderRow>True</HeaderRow>
+            <IgnoreErrors>False</IgnoreErrors>
+            <AllowShareWrite>False</AllowShareWrite>
+            <ImportLine>1</ImportLine>
+            <FieldLen>254</FieldLen>
+            <SingleThreadRead>False</SingleThreadRead>
+            <IgnoreQuotes>DoubleQuotes</IgnoreQuotes>
+            <Delimeter>,</Delimeter>
+            <QuoteRecordBreak>False</QuoteRecordBreak>
+            <CodePage>28591</CodePage>
+          </FormatSpecificOptions>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Transaction Data</Name>
+          <DefaultAnnotationText>Transactions_2024.csv</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+        <MetaInfo connection="Output">
+          <RecordInfo>
+            <Field name="TransactionID" size="254" source="File" type="V_String" />
+            <Field name="CustomerID" size="254" source="File" type="V_String" />
+            <Field name="TransactionDate" size="254" source="File" type="V_String" />
+            <Field name="Amount" size="254" source="File" type="V_String" />
+            <Field name="ProductID" size="254" source="File" type="V_String" />
+            <Field name="Quantity" size="254" source="File" type="V_String" />
+            <Field name="Channel" size="254" source="File" type="V_String" />
+          </RecordInfo>
+        </MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput" />
+    </Node>
+
+    <!-- Input 3: Product Information from Excel -->
+    <Node ToolID="3">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput">
+        <Position x="54" y="270" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Passwords />
+          <File OutputFileName="" RecordLimit="" SearchSubDirs="False" FileFormat="25">\\SharedDrive\Products\Product_Catalog_2024.xlsx|||Sheet1$</File>
+          <FormatSpecificOptions>
+            <FirstRowData>False</FirstRowData>
+            <ImportLine>1</ImportLine>
+          </FormatSpecificOptions>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Product Catalog</Name>
+          <DefaultAnnotationText>Product_Catalog_2024.xlsx
+Sheet: Sheet1$</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+        <MetaInfo connection="Output">
+          <RecordInfo>
+            <Field name="ProductID" size="254" source="File" type="V_String" />
+            <Field name="ProductName" size="254" source="File" type="V_String" />
+            <Field name="Category" size="254" source="File" type="V_String" />
+            <Field name="SubCategory" size="254" source="File" type="V_String" />
+            <Field name="UnitPrice" size="254" source="File" type="V_String" />
+            <Field name="CostPrice" size="254" source="File" type="V_String" />
+          </RecordInfo>
+        </MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput" />
+    </Node>
+
+    <!-- Input 4: Customer Segmentation from Stored Procedure -->
+    <Node ToolID="4">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileInput.DbFileInput">
+        <Position x="54" y="378" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Passwords />
+          <Connection>Driver={SQL Server};Server=ANALYTICS_SERVER;Database=SegmentationDB;Trusted_Connection=Yes;</Connection>
+          <SQL>EXEC dbo.usp_GetCustomerSegments @StartDate='2024-01-01', @EndDate='2024-12-31', @MinTransactions=5</SQL>
+          <ReadUncommitted>True</ReadUncommitted>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Customer Segments (SP)</Name>
+          <DefaultAnnotationText>ANALYTICS_SERVER.SegmentationDB
+EXEC dbo.usp_GetCustomerSegments</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+        <MetaInfo connection="Output">
+          <RecordInfo>
+            <Field name="CustomerID" size="50" source="StoredProc" type="V_String" />
+            <Field name="Segment" size="50" source="StoredProc" type="V_String" />
+            <Field name="LifetimeValue" source="StoredProc" type="Double" />
+            <Field name="RFM_Score" source="StoredProc" type="Int32" />
+            <Field name="TotalTransactions" source="StoredProc" type="Int32" />
+            <Field name="AvgOrderValue" source="StoredProc" type="Double" />
+            <Field name="LastPurchaseDate" source="StoredProc" type="DateTime" />
+          </RecordInfo>
+        </MetaInfo>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileInput" />
+    </Node>
+
+    <!-- TRANSFORMATION LAYER -->
+
+    <!-- Data Cleansing: Clean Customer Data -->
+    <Node ToolID="5">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DataCleansing.DataCleansing">
+        <Position x="162" y="54" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <ClearFieldsWithOnlyWhitespace>True</ClearFieldsWithOnlyWhitespace>
+          <RemoveLeadingWhitespace>True</RemoveLeadingWhitespace>
+          <RemoveTrailingWhitespace>True</RemoveTrailingWhitespace>
+          <RemoveExtraSpaces>True</RemoveExtraSpaces>
+          <RemoveTabs>True</RemoveTabs>
+          <RemoveLineBreaks>True</RemoveLineBreaks>
+          <RemoveLetters>False</RemoveLetters>
+          <RemoveNumbers>False</RemoveNumbers>
+          <RemovePunctuation>False</RemovePunctuation>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Clean Customer Fields</Name>
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDataCleansing" />
+    </Node>
+
+    <!-- Formula: Calculate Customer Age and Full Name -->
+    <Node ToolID="6">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Formula.Formula">
+        <Position x="270" y="54" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <FormulaFields>
+            <FormulaField expression="[FirstName] + ' ' + [LastName]" field="FullName" size="255" type="V_String" />
+            <FormulaField expression="DateTimeDiff(DateTimeToday(), [DateOfBirth], 'years')" field="Age" size="8" type="Int32" />
+            <FormulaField expression="IF [Age] &lt; 25 THEN 'Gen Z'&#xA;ELSEIF [Age] &lt; 40 THEN 'Millennial'&#xA;ELSEIF [Age] &lt; 56 THEN 'Gen X'&#xA;ELSEIF [Age] &lt; 76 THEN 'Boomer'&#xA;ELSE 'Silent'&#xA;ENDIF" field="AgeGroup" size="50" type="V_String" />
+            <FormulaField expression="DateTimeDiff(DateTimeToday(), [RegistrationDate], 'days')" field="DaysSinceRegistration" size="8" type="Int32" />
+            <FormulaField expression="UPPER([State])" field="State_Clean" size="50" type="V_String" />
+          </FormulaFields>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Customer Enrichment</Name>
+          <DefaultAnnotationText>FullName = [FirstName] + ' ' + [LastName]
+Age = DateTimeDiff(DateTimeToday(), [DateOfBirth], 'year...</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxFormula" />
+    </Node>
+
+    <!-- Auto Field: Convert Transaction Data Types -->
+    <Node ToolID="7">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.AutoField.AutoField">
+        <Position x="162" y="162" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Fields>
+            <Field field="*" selected="True" />
+          </Fields>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Auto Field Conversion</Name>
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxAutoField" />
+    </Node>
+
+    <!-- Formula: Calculate Transaction Metrics -->
+    <Node ToolID="8">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Formula.Formula">
+        <Position x="270" y="162" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <FormulaFields>
+            <FormulaField expression="[Amount] * [Quantity]" field="TotalSales" size="8" type="Double" />
+            <FormulaField expression="DateTimeFormat([TransactionDate], '%Y-%m')" field="TransactionMonth" size="50" type="V_String" />
+            <FormulaField expression="DateTimeFormat([TransactionDate], '%Y-Q' + ToString(DateTimeQuarter([TransactionDate])))" field="TransactionQuarter" size="50" type="V_String" />
+            <FormulaField expression="DateTimeYear([TransactionDate])" field="TransactionYear" size="8" type="Int32" />
+            <FormulaField expression="IF [Channel] = 'Online' THEN 'Digital'&#xA;ELSEIF [Channel] = 'Mobile' THEN 'Digital'&#xA;ELSE 'Physical'&#xA;ENDIF" field="ChannelType" size="50" type="V_String" />
+          </FormulaFields>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Transaction Calculations</Name>
+          <DefaultAnnotationText>TotalSales = [Amount] * [Quantity]
+TransactionMonth = DateTimeFormat([TransactionDate], '%...</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxFormula" />
+    </Node>
+
+    <!-- Formula: Product Margin Calculation -->
+    <Node ToolID="9">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Formula.Formula">
+        <Position x="162" y="270" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <FormulaFields>
+            <FormulaField expression="[UnitPrice] - [CostPrice]" field="UnitMargin" size="8" type="Double" />
+            <FormulaField expression="([UnitPrice] - [CostPrice]) / [UnitPrice] * 100" field="MarginPercent" size="8" type="Double" />
+            <FormulaField expression="IF [MarginPercent] &gt; 40 THEN 'High'&#xA;ELSEIF [MarginPercent] &gt; 20 THEN 'Medium'&#xA;ELSE 'Low'&#xA;ENDIF" field="MarginCategory" size="50" type="V_String" />
+          </FormulaFields>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Margin Analysis</Name>
+          <DefaultAnnotationText>UnitMargin = [UnitPrice] - [CostPrice]
+MarginPercent = ([UnitPrice] - [CostPrice]) / [Uni...</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxFormula" />
+    </Node>
+
+    <!-- JOIN LAYER -->
+
+    <!-- Join 1: Customer + Segments -->
+    <Node ToolID="10">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Join.Join">
+        <Position x="378" y="108" />
+      </GuiSettings>
+      <Properties>
+        <Configuration joinByRecordPos="False">
+          <JoinInfo connection="Left">
+            <Field field="CustomerID" />
+          </JoinInfo>
+          <JoinInfo connection="Right">
+            <Field field="CustomerID" />
+          </JoinInfo>
+          <SelectConfiguration>
+            <Configuration outputConnection="Join">
+              <OrderChanged value="False" />
+              <CommaDecimal value="False" />
+              <SelectFields>
+                <SelectField field="Left_CustomerID" selected="True" rename="CustomerID" input="Left_" />
+                <SelectField field="Left_FullName" selected="True" rename="FullName" input="Left_" />
+                <SelectField field="Left_Email" selected="True" rename="Email" input="Left_" />
+                <SelectField field="Left_Gender" selected="True" rename="Gender" input="Left_" />
+                <SelectField field="Left_Age" selected="True" rename="Age" input="Left_" />
+                <SelectField field="Left_AgeGroup" selected="True" rename="AgeGroup" input="Left_" />
+                <SelectField field="Left_City" selected="True" rename="City" input="Left_" />
+                <SelectField field="Left_State_Clean" selected="True" rename="State" input="Left_" />
+                <SelectField field="Left_DaysSinceRegistration" selected="True" rename="DaysSinceRegistration" input="Left_" />
+                <SelectField field="Right_CustomerID" selected="False" input="Right_" />
+                <SelectField field="Right_Segment" selected="True" rename="CustomerSegment" input="Right_" />
+                <SelectField field="Right_LifetimeValue" selected="True" rename="LifetimeValue" input="Right_" />
+                <SelectField field="Right_RFM_Score" selected="True" rename="RFM_Score" input="Right_" />
+                <SelectField field="Right_TotalTransactions" selected="True" rename="HistoricalTransactions" input="Right_" />
+                <SelectField field="Right_AvgOrderValue" selected="True" rename="AvgOrderValue" input="Right_" />
+                <SelectField field="*Unknown" selected="True" />
+              </SelectFields>
+            </Configuration>
+          </SelectConfiguration>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Join Customer-Segment</Name>
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxJoin" />
+    </Node>
+
+    <!-- Join 2: Transactions + Products -->
+    <Node ToolID="11">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Join.Join">
+        <Position x="378" y="216" />
+      </GuiSettings>
+      <Properties>
+        <Configuration joinByRecordPos="False">
+          <JoinInfo connection="Left">
+            <Field field="ProductID" />
+          </JoinInfo>
+          <JoinInfo connection="Right">
+            <Field field="ProductID" />
+          </JoinInfo>
+          <SelectConfiguration>
+            <Configuration outputConnection="Join">
+              <OrderChanged value="False" />
+              <CommaDecimal value="False" />
+              <SelectFields>
+                <SelectField field="Left_TransactionID" selected="True" rename="TransactionID" input="Left_" />
+                <SelectField field="Left_CustomerID" selected="True" rename="CustomerID" input="Left_" />
+                <SelectField field="Left_TransactionDate" selected="True" rename="TransactionDate" input="Left_" />
+                <SelectField field="Left_ProductID" selected="True" rename="ProductID" input="Left_" />
+                <SelectField field="Left_Quantity" selected="True" rename="Quantity" input="Left_" />
+                <SelectField field="Left_TotalSales" selected="True" rename="TotalSales" input="Left_" />
+                <SelectField field="Left_TransactionMonth" selected="True" rename="TransactionMonth" input="Left_" />
+                <SelectField field="Left_TransactionQuarter" selected="True" rename="TransactionQuarter" input="Left_" />
+                <SelectField field="Left_Channel" selected="True" rename="Channel" input="Left_" />
+                <SelectField field="Left_ChannelType" selected="True" rename="ChannelType" input="Left_" />
+                <SelectField field="Right_ProductID" selected="False" input="Right_" />
+                <SelectField field="Right_ProductName" selected="True" rename="ProductName" input="Right_" />
+                <SelectField field="Right_Category" selected="True" rename="Category" input="Right_" />
+                <SelectField field="Right_SubCategory" selected="True" rename="SubCategory" input="Right_" />
+                <SelectField field="Right_UnitMargin" selected="True" rename="UnitMargin" input="Right_" />
+                <SelectField field="Right_MarginPercent" selected="True" rename="MarginPercent" input="Right_" />
+                <SelectField field="Right_MarginCategory" selected="True" rename="MarginCategory" input="Right_" />
+                <SelectField field="*Unknown" selected="True" />
+              </SelectFields>
+            </Configuration>
+          </SelectConfiguration>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Join Transaction-Product</Name>
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxJoin" />
+    </Node>
+
+    <!-- Join 3: Master Join - Enriched Customers + Transaction Details -->
+    <Node ToolID="12">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Join.Join">
+        <Position x="486" y="162" />
+      </GuiSettings>
+      <Properties>
+        <Configuration joinByRecordPos="False">
+          <JoinInfo connection="Left">
+            <Field field="CustomerID" />
+          </JoinInfo>
+          <JoinInfo connection="Right">
+            <Field field="CustomerID" />
+          </JoinInfo>
+          <SelectConfiguration>
+            <Configuration outputConnection="Join">
+              <OrderChanged value="False" />
+              <CommaDecimal value="False" />
+              <SelectFields>
+                <SelectField field="*" selected="True" />
+              </SelectFields>
+            </Configuration>
+          </SelectConfiguration>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Master Join</Name>
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxJoin" />
+    </Node>
+
+    <!-- Formula: Calculate Final Metrics -->
+    <Node ToolID="13">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Formula.Formula">
+        <Position x="594" y="162" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <FormulaFields>
+            <FormulaField expression="[TotalSales] * ([MarginPercent] / 100)" field="GrossProfit" size="8" type="Double" />
+            <FormulaField expression="[Quantity] * [UnitMargin]" field="TransactionMargin" size="8" type="Double" />
+            <FormulaField expression="IF [CustomerSegment] = 'Premium' AND [TotalSales] &gt; 500 THEN 'High Value'&#xA;ELSEIF [CustomerSegment] = 'Premium' THEN 'Premium Regular'&#xA;ELSEIF [TotalSales] &gt; 300 THEN 'Growing'&#xA;ELSE 'Standard'&#xA;ENDIF" field="TransactionTier" size="50" type="V_String" />
+            <FormulaField expression="ROUND([TotalSales] / [Quantity], 2)" field="AvgItemPrice" size="8" type="Double" />
+          </FormulaFields>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Final Calculations</Name>
+          <DefaultAnnotationText>GrossProfit = [TotalSales] * ([MarginPercent] / 100)
+TransactionMargin = [Quantity] * [Uni...</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxFormula" />
+    </Node>
+
+    <!-- AGGREGATION LAYER -->
+
+    <!-- Summarize 1: Customer Summary Metrics -->
+    <Node ToolID="14">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Summarize.Summarize">
+        <Position x="702" y="54" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <SummarizeFields>
+            <SummarizeField field="CustomerID" action="GroupBy" rename="CustomerID" />
+            <SummarizeField field="FullName" action="First" rename="CustomerName" />
+            <SummarizeField field="CustomerSegment" action="First" rename="Segment" />
+            <SummarizeField field="State" action="First" rename="State" />
+            <SummarizeField field="AgeGroup" action="First" rename="AgeGroup" />
+            <SummarizeField field="TransactionID" action="Count" rename="TotalTransactionCount" />
+            <SummarizeField field="TotalSales" action="Sum" rename="TotalRevenue" />
+            <SummarizeField field="GrossProfit" action="Sum" rename="TotalGrossProfit" />
+            <SummarizeField field="TotalSales" action="Avg" rename="AvgTransactionValue" />
+            <SummarizeField field="TransactionDate" action="Max" rename="LastPurchaseDate" />
+            <SummarizeField field="Quantity" action="Sum" rename="TotalItemsPurchased" />
+          </SummarizeFields>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Customer Summary</Name>
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxSummarize" />
+    </Node>
+
+    <!-- Summarize 2: Product Performance -->
+    <Node ToolID="15">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Summarize.Summarize">
+        <Position x="702" y="162" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <SummarizeFields>
+            <SummarizeField field="Category" action="GroupBy" rename="Category" />
+            <SummarizeField field="SubCategory" action="GroupBy" rename="SubCategory" />
+            <SummarizeField field="ProductName" action="GroupBy" rename="ProductName" />
+            <SummarizeField field="TransactionID" action="Count" rename="SalesCount" />
+            <SummarizeField field="Quantity" action="Sum" rename="TotalQuantitySold" />
+            <SummarizeField field="TotalSales" action="Sum" rename="TotalRevenue" />
+            <SummarizeField field="GrossProfit" action="Sum" rename="TotalProfit" />
+            <SummarizeField field="MarginPercent" action="Avg" rename="AvgMarginPercent" />
+          </SummarizeFields>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Product Performance</Name>
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxSummarize" />
+    </Node>
+
+    <!-- Summarize 3: Monthly Trend Analysis -->
+    <Node ToolID="16">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Summarize.Summarize">
+        <Position x="702" y="270" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <SummarizeFields>
+            <SummarizeField field="TransactionMonth" action="GroupBy" rename="Month" />
+            <SummarizeField field="ChannelType" action="GroupBy" rename="ChannelType" />
+            <SummarizeField field="CustomerSegment" action="GroupBy" rename="Segment" />
+            <SummarizeField field="TransactionID" action="Count" rename="TransactionCount" />
+            <SummarizeField field="CustomerID" action="CountDistinct" rename="UniqueCustomers" />
+            <SummarizeField field="TotalSales" action="Sum" rename="Revenue" />
+            <SummarizeField field="GrossProfit" action="Sum" rename="Profit" />
+            <SummarizeField field="TotalSales" action="Avg" rename="AvgOrderValue" />
+          </SummarizeFields>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Monthly Trends</Name>
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxSummarize" />
+    </Node>
+
+    <!-- RANKING AND FILTERING -->
+
+    <!-- Sort: Rank Customers by Revenue -->
+    <Node ToolID="17">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Sort.Sort">
+        <Position x="810" y="54" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <SortInfo locale="1033">
+            <Field field="TotalRevenue" order="Descending" />
+          </SortInfo>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Rank by Revenue</Name>
+          <DefaultAnnotationText>TotalRevenue - Descending</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxSort" />
+    </Node>
+
+    <!-- Formula: Add Customer Rank -->
+    <Node ToolID="18">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Formula.Formula">
+        <Position x="918" y="54" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <FormulaFields>
+            <FormulaField expression="RecordID()" field="CustomerRank" size="8" type="Int32" />
+            <FormulaField expression="IF [CustomerRank] &lt;= 100 THEN 'Top 100'&#xA;ELSEIF [CustomerRank] &lt;= 500 THEN 'Top 500'&#xA;ELSE 'Others'&#xA;ENDIF" field="RankingTier" size="50" type="V_String" />
+          </FormulaFields>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Add Ranking</Name>
+          <DefaultAnnotationText>CustomerRank = RecordID()
+RankingTier = IF [CustomerRank] &lt;= 100 THEN 'Top 100'
+ELSEIF...</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxFormula" />
+    </Node>
+
+    <!-- Filter: Top 1000 Customers -->
+    <Node ToolID="19">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.Filter.Filter">
+        <Position x="1026" y="54" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Mode>Simple</Mode>
+          <Simple>
+            <Operator>&lt;=</Operator>
+            <Field>CustomerRank</Field>
+            <Operands>
+              <Operand>1000</Operand>
+            </Operands>
+          </Simple>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Top 1000 Filter</Name>
+          <DefaultAnnotationText>[CustomerRank] &lt;= 1000</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxFilter" />
+    </Node>
+
+    <!-- OUTPUT LAYER -->
+
+    <!-- Output 1: Top Customers to SQL Server via Stored Procedure -->
+    <Node ToolID="20">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileOutput.DbFileOutput">
+        <Position x="1134" y="54" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Connection>Driver={SQL Server};Server=ANALYTICS_SERVER;Database=ReportsDB;Trusted_Connection=Yes;</Connection>
+          <TableName>dbo.TopCustomers</TableName>
+          <PreSQL>EXEC dbo.usp_TruncateTopCustomers</PreSQL>
+          <PostSQL>EXEC dbo.usp_UpdateCustomerDashboard @RunDate='[DateTime.Now()]'</PostSQL>
+          <SpatialObjSize>8000</SpatialObjSize>
+          <OutputOption>Delete</OutputOption>
+          <TransactionSize>10000</TransactionSize>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Write to TopCustomers (SP)</Name>
+          <DefaultAnnotationText>ANALYTICS_SERVER.ReportsDB
+dbo.TopCustomers</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileOutput" />
+    </Node>
+
+    <!-- Output 2: Product Performance to Excel -->
+    <Node ToolID="21">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileOutput.DbFileOutput">
+        <Position x="810" y="162" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <File MaxRecords="" FileFormat="25">\\SharedDrive\Reports\Product_Performance_Analysis.xlsx|||Product_Summary</File>
+          <Passwords />
+          <FormatSpecificOptions>
+            <PreserveFormat>False</PreserveFormat>
+            <SkipFieldNames>False</SkipFieldNames>
+            <OutputOption>Overwrite</OutputOption>
+          </FormatSpecificOptions>
+          <MultiFile value="False" />
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Product Performance Excel</Name>
+          <DefaultAnnotationText>Product_Performance_Analysis.xlsx
+Sheet: Product_Summary</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileOutput" />
+    </Node>
+
+    <!-- Output 3: Monthly Trends to CSV -->
+    <Node ToolID="22">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileOutput.DbFileOutput">
+        <Position x="810" y="270" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <File MaxRecords="" FileFormat="0">\\SharedDrive\Reports\Monthly_Trends_Analysis.csv</File>
+          <Passwords />
+          <FormatSpecificOptions>
+            <LineEndStyle>CRLF</LineEndStyle>
+            <Delimeter>,</Delimeter>
+            <ForceQuotes>False</ForceQuotes>
+            <HeaderRow>True</HeaderRow>
+            <CodePage>28591</CodePage>
+            <WriteBOM>True</WriteBOM>
+          </FormatSpecificOptions>
+          <MultiFile value="False" />
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Monthly Trends CSV</Name>
+          <DefaultAnnotationText>Monthly_Trends_Analysis.csv</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileOutput" />
+    </Node>
+
+    <!-- Output 4: Detailed Transaction Data to Data Warehouse -->
+    <Node ToolID="23">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.DbFileOutput.DbFileOutput">
+        <Position x="702" y="378" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <Connection>Driver={SQL Server};Server=DW_SERVER;Database=EnterpriseDataWarehouse;Trusted_Connection=Yes;</Connection>
+          <TableName>fact.CustomerTransactions</TableName>
+          <PreSQL>TRUNCATE TABLE staging.CustomerTransactions_Temp</PreSQL>
+          <PostSQL>EXEC dbo.usp_MergeCustomerTransactions @LoadDate='[DateTime.Now()]', @SourceSystem='Alteryx'</PostSQL>
+          <SpatialObjSize>8000</SpatialObjSize>
+          <OutputOption>Append</OutputOption>
+          <TransactionSize>50000</TransactionSize>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Load to Data Warehouse (SP)</Name>
+          <DefaultAnnotationText>DW_SERVER.EnterpriseDataWarehouse
+fact.CustomerTransactions</DefaultAnnotationText>
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxDbFileOutput" />
+    </Node>
+
+    <!-- Browse Tools for Validation -->
+    <Node ToolID="24">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.BrowseV2.BrowseV2">
+        <Position x="1242" y="54" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <TempFile>C:\Temp\TopCustomers_Browse.yxdb</TempFile>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Browse Top Customers</Name>
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxBrowseV2" />
+    </Node>
+
+    <Node ToolID="25">
+      <GuiSettings Plugin="AlteryxBasePluginsGui.BrowseV2.BrowseV2">
+        <Position x="918" y="162" />
+      </GuiSettings>
+      <Properties>
+        <Configuration>
+          <TempFile>C:\Temp\ProductPerformance_Browse.yxdb</TempFile>
+        </Configuration>
+        <Annotation DisplayMode="0">
+          <Name>Browse Products</Name>
+          <DefaultAnnotationText />
+          <Left value="False" />
+        </Annotation>
+      </Properties>
+      <EngineSettings EngineDll="AlteryxBasePluginsEngine.dll" EngineDllEntryPoint="AlteryxBrowseV2" />
+    </Node>
+
+  </Nodes>
+
+  <Connections>
+    <!-- Customer Data Flow -->
+    <Connection>
+      <Origin ToolID="1" Connection="Output" />
+      <Destination ToolID="5" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="5" Connection="Output" />
+      <Destination ToolID="6" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="6" Connection="Output" />
+      <Destination ToolID="10" Connection="Left" />
+    </Connection>
+
+    <!-- Segment Data Flow -->
+    <Connection>
+      <Origin ToolID="4" Connection="Output" />
+      <Destination ToolID="10" Connection="Right" />
+    </Connection>
+
+    <!-- Transaction Data Flow -->
+    <Connection>
+      <Origin ToolID="2" Connection="Output" />
+      <Destination ToolID="7" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="7" Connection="Output" />
+      <Destination ToolID="8" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="8" Connection="Output" />
+      <Destination ToolID="11" Connection="Left" />
+    </Connection>
+
+    <!-- Product Data Flow -->
+    <Connection>
+      <Origin ToolID="3" Connection="Output" />
+      <Destination ToolID="9" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="9" Connection="Output" />
+      <Destination ToolID="11" Connection="Right" />
+    </Connection>
+
+    <!-- Master Join Flow -->
+    <Connection>
+      <Origin ToolID="10" Connection="Join" />
+      <Destination ToolID="12" Connection="Left" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="11" Connection="Join" />
+      <Destination ToolID="12" Connection="Right" />
+    </Connection>
+
+    <!-- Final Calculations -->
+    <Connection>
+      <Origin ToolID="12" Connection="Join" />
+      <Destination ToolID="13" Connection="Input" />
+    </Connection>
+
+    <!-- Aggregation Flows -->
+    <Connection>
+      <Origin ToolID="13" Connection="Output" />
+      <Destination ToolID="14" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="13" Connection="Output" />
+      <Destination ToolID="15" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="13" Connection="Output" />
+      <Destination ToolID="16" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="13" Connection="Output" />
+      <Destination ToolID="23" Connection="Input" />
+    </Connection>
+
+    <!-- Customer Summary Flow -->
+    <Connection>
+      <Origin ToolID="14" Connection="Output" />
+      <Destination ToolID="17" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="17" Connection="Output" />
+      <Destination ToolID="18" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="18" Connection="Output" />
+      <Destination ToolID="19" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="19" Connection="True" />
+      <Destination ToolID="20" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="20" Connection="Output" />
+      <Destination ToolID="24" Connection="Input" />
+    </Connection>
+
+    <!-- Product Performance Flow -->
+    <Connection>
+      <Origin ToolID="15" Connection="Output" />
+      <Destination ToolID="21" Connection="Input" />
+    </Connection>
+    <Connection>
+      <Origin ToolID="21" Connection="Output" />
+      <Destination ToolID="25" Connection="Input" />
+    </Connection>
+
+    <!-- Monthly Trends Flow -->
+    <Connection>
+      <Origin ToolID="16" Connection="Output" />
+      <Destination ToolID="22" Connection="Input" />
+    </Connection>
+  </Connections>
+
+  <Properties>
+    <Memory default="True" />
+    <GlobalRecordLimit value="0" />
+    <TempFiles default="True" />
+    <Annotation on="True" includeToolName="False" />
+    <ConvErrorLimit value="10" />
+    <ConvErrorLimit_Stop value="False" />
+    <CancelOnError value="False" />
+    <DisableBrowse value="False" />
+    <EnablePerformanceProfiling value="False" />
+    <DisableAllOutput value="False" />
+    <ShowAllMacroMessages value="False" />
+    <ShowConnectionStatusIsOn value="True" />
+    <ShowConnectionStatusOnlyWhenRunning value="True" />
+    <ZoomLevel value="0" />
+    <LayoutType>Horizontal</LayoutType>
+    <MetaInfo>
+      <NameIsFileName value="True" />
+      <Name>Customer_Analytics_Master_Workflow</Name>
+      <Description>Comprehensive customer analytics workflow demonstrating:
+- Multiple data sources (SQL Server, CSV, Excel)
+- Stored procedure integration (Pre/Post SQL)
+- Complex transformations and calculations
+- Multiple join operations
+- Aggregations and summarizations
+- Data quality and cleansing
+- Column-level lineage tracking
+- Enterprise data warehouse integration</Description>
+      <RootToolName />
+      <ToolVersion />
+      <ToolInDb value="False" />
+      <CategoryName>Analytics</CategoryName>
+      <SearchTags>customer analytics, lineage, STTM, stored procedure, data warehouse</SearchTags>
+      <Author>Data Engineering Team</Author>
+      <Company>Enterprise Analytics</Company>
+      <Copyright>2024</Copyright>
+    </MetaInfo>
+    <Events>
+      <Enabled value="True" />
+    </Events>
+  </Properties>
+</AlteryxDocument>
