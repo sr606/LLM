@@ -1,0 +1,398 @@
+// ======================================================================
+// PSEUDOCODE: LS_Sample_job1 1 2.xml
+// ======================================================================
+
+// --- [HASHEDFILESTAGE : HSH_MIDTERM_HIST] [Lines 137-144] ---
+  Input: ← dataset_17 (tfmLookupSubmittedCount) (Link: lk_HSH_MIDTERM_HIST)
+  StageType: CHashedFileStage
+  Link File (lk_HSH_MIDTERM_HIST): HSH_MIDTERM_HIST
+  Link File (lk_XFM_HSH_MIDTERM_HIST): HSH_MIDTERM_HIST
+  Output: → dataset_1 (HSH_MIDTERM_HIST)
+
+// --- [HASHEDFILESTAGE : HSH_BARCLAYS_EMPLOYEE_ACTION] [Lines 608-615] ---
+  Input: ← dataset_14 (OraD_BARCLAYS_EMPLOYEE_ACTION) (Link: lk_OraD_BARCLAYS_EMPLOYEE_ACTION)
+  StageType: CHashedFileStage
+  Transformations:
+    -- Output: lkHshBarclaysEmployeeAction --
+    BARCLAYS_EMPLOYEE_ACTION_BK = TRIM(lnkTfmEmpMidTermHistInfo1.CHANGE)
+  Link File (lk_OraD_BARCLAYS_EMPLOYEE_ACTION): HSH_BARCLAYS_EMPLOYEE_ACTION
+  Link File (lkHshBarclaysEmployeeAction): HSH_BARCLAYS_EMPLOYEE_ACTION
+  Output: → dataset_2 (HSH_BARCLAYS_EMPLOYEE_ACTION)
+
+// --- [HASHEDFILESTAGE : HSH_STG_F_BARCLAYS_MIDTERM_HIST] [Lines 694-701] ---
+  Input: ← dataset_15 (ora_STG_F_BARCLAYS_MIDTERM_HIST) (Link: lk_stg_midterm_hist)
+  StageType: CHashedFileStage
+  Transformations:
+    -- Output: lk_stg_midterm_hist_ref --
+    CUST_ID = lnkTfmEmpMidTermHistInfo1.CUST_ID
+    DRIVER_ID_NO = lnkTfmEmpMidTermHistInfo1.DRIVER_ID_NO
+  Link File (lk_stg_midterm_hist): HSH_STG_F_BARCLAYS_MIDTERM_HIST
+  Link File (lk_stg_midterm_hist_ref): HSH_STG_F_BARCLAYS_MIDTERM_HIST
+  Output: → dataset_3 (HSH_STG_F_BARCLAYS_MIDTERM_HIST)
+
+// --- [TRANSFORMERSTAGE : Xfm_UpdStgbarclayMidterm] [Lines 1203-1213] ---
+  Input: ← dataset_1 (HSH_MIDTERM_HIST) (Link: lk_XFM_HSH_MIDTERM_HIST)
+  StageType: CTransformerStage
+  Transformations:
+    -- Output: UpdStgbarclayMidterm --
+    CUST_ID = lk_XFM_HSH_MIDTERM_HIST.CUST_ID
+    DRIVER_ID_NO = lk_XFM_HSH_MIDTERM_HIST.DRIVER_ID_NO
+    CHANGE_COMMENTARY = lk_XFM_HSH_MIDTERM_HIST.CHANGE_COMMENTARY
+    EMPLOYEE_CHANGE_CODE = lk_XFM_HSH_MIDTERM_HIST.EMPLOYEE_CHANGE_CODE
+    BARCLAYS_EMPLOYEE_ACTION_SK = lk_XFM_HSH_MIDTERM_HIST.BARCLAYS_EMPLOYEE_ACTION_SK
+  Output: → dataset_4 (Xfm_UpdStgbarclayMidterm)
+
+// --- [TRANSFORMERSTAGE : xfm_Employee_Changes_reporting] [Lines 1385-1395] ---
+  Input: ← dataset_17 (tfmLookupSubmittedCount) (Link: lk_xfm_Employee_Changes_reporting)
+  StageType: CTransformerStage
+  Transformations:
+    -- Output: lk_Ora_STG_EMPLOYEE_CHANGES_REPORTING --
+    CUST_ID = lk_xfm_Employee_Changes_reporting.CUST_ID
+    DRIVER_ID_NO = lk_xfm_Employee_Changes_reporting.DRIVER_ID_NO
+    BARCLAYS_EMPLOYEE_ACTION_SK = lk_xfm_Employee_Changes_reporting.BARCLAYS_EMPLOYEE_ACTION_SK
+    CURR_GRADE = UpCase(lk_xfm_Employee_Changes_reporting.CURR_GRADE)
+    PREV_GRADE = UpCase(lk_xfm_Employee_Changes_reporting.PREV_GRADE)
+    CURR_JOB_TITLE = lk_xfm_Employee_Changes_reporting.CURR_JOB_TITLE
+    PREV_JOB_TITLE = lk_xfm_Employee_Changes_reporting.PREV_JOB_TITLE
+    ALL_EMP_CAN_QUOTE = lk_xfm_Employee_Changes_reporting.ALL_EMP_CAN_QUOTE
+    ALL_EMP_CAN_ORDER = lk_xfm_Employee_Changes_reporting.ALL_EMP_CAN_ORDER
+    ALL_EMP_AUTHORISE_TYPE = lk_xfm_Employee_Changes_reporting.ALL_EMP_AUTHORISE_TYPE
+    ALL_EMP_TERMINATE_VEHICLE = lk_xfm_Employee_Changes_reporting.ALL_EMP_TERMINATE_VEHICLE
+    ALL_EMP_CALL_BARCLAYS_HR = lk_xfm_Employee_Changes_reporting.ALL_EMP_CALL_BARCLAYS_HR
+    NEEDS_CAN_QUOTE = lk_xfm_Employee_Changes_reporting.NEEDS_CAN_QUOTE
+    NEEDS_CAN_ORDER = lk_xfm_Employee_Changes_reporting.NEEDS_CAN_ORDER
+    NEEDS_AUTHORISE_TYPE = lk_xfm_Employee_Changes_reporting.NEEDS_AUTHORISE_TYPE
+    NEEDS_TERMINATE_VEHICLE = lk_xfm_Employee_Changes_reporting.NEEDS_TERMINATE_VEHICLE
+    NEEDS_CALL_BARCLAYS_HR = lk_xfm_Employee_Changes_reporting.NEEDS_CALL_BARCLAYS_HR
+    COUNT_CALC_QUOTE = lk_xfm_Employee_Changes_reporting.COUNT_CALC_QUOTE
+    COUNT_SUBMITTED_QUOTE = lk_xfm_Employee_Changes_reporting.COUNT_SUBMITTED_QUOTE
+    COUNT_CLIENT_AUTH_QUOTE = lk_xfm_Employee_Changes_reporting.COUNT_CLIENT_AUTH_QUOTE
+    LIVE_ORDER_STATUS = lk_xfm_Employee_Changes_reporting.LIVE_ORDER_STATUS
+    LIVE_VEHICLE_STATUS = lk_xfm_Employee_Changes_reporting.LIVE_VEHICLE_STATUS
+    CHANGE_CODE = lk_xfm_Employee_Changes_reporting.CHANGE
+    NEW_EMPLOYEE_FLAG = lk_xfm_Employee_Changes_reporting.NEW_EMPLOYEE_FLAG
+    DROPPED_FROM_NEEDS_FLAG = lk_xfm_Employee_Changes_reporting.DROPPED_FROM_NEEDS_FLAG
+  Output: → dataset_5 (xfm_Employee_Changes_reporting)
+
+// --- [TRANSFORMERSTAGE : xfm_Reporting_flag] [Lines 2171-2394] ---
+  Input: ← dataset_11 (Ora_STG_EMPLOYEE_CHANGES_REPORTING) (Link: lk_reporting_Flag)
+  Input: ← dataset_8 (Rule_Lkps) (Link: lk_grade_schm_lkp)
+  Input: ← dataset_8 (Rule_Lkps) (Link: lk_evnt_lkp)
+  Stage Variables:
+    StageVar svEventFlagLkp = NOT(lk_evnt_lkp.NOTFOUND)
+    StageVar svGraSchLkp = NOT(lk_grade_schm_lkp.NOTFOUND)
+    StageVar svQuoteCountFlag = IF (lk_reporting_Flag.COUNT_CALC_QUOTE+lk_reporting_Flag.COUNT_SUBMITTED_QUOTE+lk_reporting_Flag.COUNT_CLIENT_AUTH_QUOTE)>0 THEN 'Y' ELSE 'N'
+    StageVar svAuthQuoteFlag = IF (lk_reporting_Flag.COUNT_CLIENT_AUTH_QUOTE>0) THEN 'Y' ELSE 'N'
+    StageVar svLiveOrderFlag = lk_reporting_Flag.LIVE_ORDER_STATUS
+    StageVar svLiveVehFlag = lk_reporting_Flag.LIVE_VEHICLE_STATUS
+    StageVar svCanQuoteFlag = IF ( 
+
+        (
+
+            lk_evnt_lkp.FIELD_NAME='ALL_EMP_CAN_QUOTE'  AND SUBSTRINGS(lk_reporting_Flag.CHANGE_CODE,1,1)='Y' AND trim(UPCASE(lk_reporting_Flag.CURR_GRADE))='ALL EMPLOYEES'
+
+        ) 
+
+         OR 
+
+        (
+
+          lk_evnt_lkp.FIELD_NAME='NEEDS_CAN_QUOTE' AND SUBSTRINGS(lk_reporting_Flag.CHANGE_CODE,8,1) ='Y' AND  trim(UPCASE(lk_reporting_Flag.CURR_GRADE))='NEEDS'
+
+        ) 
+
+    )
+
+
+
+       AND  (svQuoteCountFlag='Y' OR svLiveOrderFlag='Y')
+
+    THEN 1 else 0
+    StageVar svCanOrderFlag = IF ( 
+
+     (
+
+          lk_evnt_lkp.FIELD_NAME='ALL_EMP_CAN_ORDER' AND SUBSTRINGS(lk_reporting_Flag.CHANGE_CODE,2,1)='Y' AND trim(UPCASE(lk_reporting_Flag.CURR_GRADE))='ALL EMPLOYEES'
+
+      ) 
+
+        OR 
+
+      ( 
+
+          lk_evnt_lkp.FIELD_NAME='NEEDS_CAN_ORDER' AND SUBSTRINGS(lk_reporting_Flag.CHANGE_CODE,9,1) ='Y' AND  trim(UPCASE(lk_reporting_Flag.CURR_GRADE))='NEEDS'
+
+      ) 
+
+   )
+
+     
+
+      AND  (svQuoteCountFlag='Y' OR svLiveOrderFlag='Y') 
+
+   THEN 1 else 0
+    StageVar svAuthTypeFlag = IF (  
+
+     (
+
+       lk_evnt_lkp.FIELD_NAME='ALL_EMP_AUTHORISE_TYPE'  AND SUBSTRINGS(lk_reporting_Flag.CHANGE_CODE,3,1)='Y'  AND  trim(UPCASE(lk_reporting_Flag.CURR_GRADE))='ALL EMPLOYEES'
+
+     )
+
+	OR 
+
+     (
+
+ 	lk_evnt_lkp.FIELD_NAME='NEEDS_AUTHORISE_TYPE'  AND  SUBSTRINGS(lk_reporting_Flag.CHANGE_CODE,10,1)='Y' AND  trim(UPCASE(lk_reporting_Flag.CURR_GRADE))='NEEDS'
+
+     )			
+
+   )
+
+	AND (svAuthQuoteFlag ='Y' OR svLiveOrderFlag='Y') 
+
+
+
+    THEN 1 else 0\(20)
+    StageVar svTermVehFlag = IF ( 
+
+     (
+
+	lk_evnt_lkp.FIELD_NAME='ALL_EMP_TERMINATE_VEHICLE'  AND SUBSTRINGS(lk_reporting_Flag.CHANGE_CODE,4 ,1)='Y' AND  trim(UPCASE(lk_reporting_Flag.CURR_GRADE))='ALL EMPLOYEES'
+
+     )
+
+	OR 
+
+     (
+
+	lk_evnt_lkp.FIELD_NAME='NEEDS_TERMINATE_VEHICLE' AND SUBSTRINGS(lk_reporting_Flag.CHANGE_CODE,11,1)='Y' AND  trim(UPCASE(lk_reporting_Flag.CURR_GRADE))='NEEDS'
+
+     ) 
+
+   ) AND (svLiveOrderFlag='Y' or svLiveVehFlag='Y') 
+
+    
+
+    THEN 1 else 0
+    StageVar svCallBarHRFlag = IF (
+
+       ( 
+
+          (lk_evnt_lkp.FIELD_NAME='ALL_EMP_CALL_BARCLAYS_HR' and SUBSTRINGS(lk_reporting_Flag.CHANGE_CODE,7,1)='Y' AND  trim(UPCASE(lk_reporting_Flag.CURR_GRADE))='ALL EMPLOYEES')
+
+       OR 
+
+          (lk_evnt_lkp.FIELD_NAME='NEEDS_CALL_BARCLAYS_HR' and SUBSTRINGS(lk_reporting_Flag.CHANGE_CODE,14,1)='Y' AND  trim(UPCASE(lk_reporting_Flag.CURR_GRADE))='NEEDS')
+
+       ) AND  (lk_reporting_Flag.CURR='Y')
+
+   )   OR 
+
+   (
+
+       ( 
+
+          (lk_evnt_lkp.FIELD_NAME='ALL_EMP_CALL_BARCLAYS_HR' and SUBSTRINGS(lk_reporting_Flag.CHANGE_CODE,7 ,1)='Y' AND  trim(UPCASE(lk_reporting_Flag.CURR_GRADE))='ALL EMPLOYEES')
+
+       OR 
+
+          (lk_evnt_lkp.FIELD_NAME='NEEDS_CALL_BARCLAYS_HR' and SUBSTRINGS(lk_reporting_Flag.CHANGE_CODE,14,1)='Y' AND  trim(UPCASE(lk_reporting_Flag.CURR_GRADE))='NEEDS')
+
+       ) AND  (lk_reporting_Flag.CURR='O') AND (svLiveOrderFlag='Y' or svLiveVehFlag='Y')
+
+   ) 
+
+    THEN 1 else 0
+    StageVar svNewNeeds = IF lk_reporting_Flag.NEW_EMPLOYEE_FLAG='Y' AND lk_reporting_Flag.FIELD_NAME='SCHEME' AND lk_reporting_Flag.CURR_GRADE ='NEEDS' THEN 1 ELSE 0
+    StageVar svDroppedNeeds = IF lk_reporting_Flag.DROPPED_FROM_NEEDS_FLAG ='Y' AND lk_reporting_Flag.FIELD_NAME='SCHEME' AND lk_reporting_Flag.CURR_GRADE ='NEEDS' THEN 1 ELSE 0
+    StageVar svflagChange = IF (Substrings(lk_reporting_Flag.CHANGE_CODE,1,4):Substrings(lk_reporting_Flag.CHANGE_CODE,7,1):Substrings(lk_reporting_Flag.CHANGE_CODE,8,4):Substrings(lk_reporting_Flag.CHANGE_CODE,14,1))<>'NNNNNNNNNN' THEN 1 ELSE 0
+    StageVar svReportingFlag = if (svGraSchLkp) OR ((svCanQuoteFlag OR svCanOrderFlag or svAuthTypeFlag OR svTermVehFlag OR svCallBarHRFlag) AND svflagChange)   OR (svNewNeeds) =1 OR svDroppedNeeds=1 then 'Y' ELSE 'N'
+  Constraint (lk_EMP_ACT_CHG_REP_FLAG_HSH): svReportingFlag='Y'
+  StageType: CTransformerStage
+  Transformations:
+    -- Output: lk_EMP_ACT_CHG_REP_FLAG_HSH --
+    CUST_ID = lk_reporting_Flag.CUST_ID
+    DRIVER_ID_NO = lk_reporting_Flag.DRIVER_ID_NO
+    FIELD_NAME = lk_reporting_Flag.FIELD_NAME
+    PREV = lk_reporting_Flag.PREV
+    CURR = lk_reporting_Flag.CURR
+    REPORTING_FLAG = svReportingFlag
+    COUNT_CALC_QUOTE = lk_reporting_Flag.COUNT_CALC_QUOTE
+    COUNT_SUBMITTED_QUOTE = lk_reporting_Flag.COUNT_SUBMITTED_QUOTE
+    COUNT_CLIENT_AUTH_QUOTE = lk_reporting_Flag.COUNT_CLIENT_AUTH_QUOTE
+    LIVE_ORDER_STATUS = lk_reporting_Flag.LIVE_ORDER_STATUS
+    LIVE_VEHICLE_STATUS = lk_reporting_Flag.LIVE_VEHICLE_STATUS
+    -- Output: To_HSH_TEMP --
+    CUST_ID = lk_reporting_Flag.CUST_ID
+    DRIVER_ID_NO = lk_reporting_Flag.DRIVER_ID_NO
+    SEQ_NO = @INROWNUM
+    svEventFlagLkp = svEventFlagLkp
+    svGraSchLkp = svGraSchLkp
+    svQuoteCountFlag = svQuoteCountFlag
+    COUNT_CALC_QUOTE = lk_reporting_Flag.COUNT_CALC_QUOTE
+    COUNT_SUBMITTED_QUOTE = lk_reporting_Flag.COUNT_SUBMITTED_QUOTE
+    COUNT_CLIENT_AUTH_QUOTE = lk_reporting_Flag.COUNT_CLIENT_AUTH_QUOTE
+    svAuthQuoteFlag = svAuthQuoteFlag
+    svLiveOrderFlag = svLiveOrderFlag
+    svLiveVehFlag = svLiveVehFlag
+    FIELD_NAME = lk_evnt_lkp.FIELD_NAME
+    CHANGE_CODE = lk_reporting_Flag.CHANGE_CODE
+    CURR_GRADE = lk_reporting_Flag.CURR_GRADE
+    svCanQuoteFlag = svCanQuoteFlag
+    svCanOrderFlag = svCanOrderFlag
+    svAuthTypeFlag = svAuthTypeFlag
+    svTermVehFlag = svTermVehFlag
+    CURR = lk_reporting_Flag.CURR
+    svCallBarHRFlag = svCallBarHRFlag
+    NEW_EMPLOYEE_FLAG = lk_reporting_Flag.NEW_EMPLOYEE_FLAG
+    svNewNeeds = svNewNeeds
+    DROPPED_FROM_NEEDS_FLAG = lk_reporting_Flag.DROPPED_FROM_NEEDS_FLAG
+    svFlagChange = svflagChange
+    svReportingFlag = svReportingFlag
+  Output: → dataset_6 (xfm_Reporting_flag)
+
+// --- [HASHEDFILESTAGE : EMP_ACT_CHG_REP_FLAG_HSH] [Lines 3516-3522] ---
+  Input: ← dataset_6 (xfm_Reporting_flag) (Link: lk_EMP_ACT_CHG_REP_FLAG_HSH)
+  StageType: CHashedFileStage
+  Link File (lk_EMP_ACT_CHG_REP_FLAG_HSH): EMP_ACT_CHG_REP_FLAG_HSH
+  Output: → dataset_7 (EMP_ACT_CHG_REP_FLAG_HSH)
+
+// --- [HASHEDFILESTAGE : Rule_Lkps] [Lines 3534-3541] ---
+  Input: ← dataset_9 (xfm_RuleLkps) (Link: lk_grade_schemlkp)
+  Input: ← dataset_9 (xfm_RuleLkps) (Link: lk_event_lkp)
+  StageType: CHashedFileStage
+  Transformations:
+    -- Output: lk_evnt_lkp --
+    CUST_ID = lk_reporting_Flag.CUST_ID
+    FIELD_NAME = TRIM(lk_reporting_Flag.FIELD_NAME)
+    CURR_VALUE = TRIM(lk_reporting_Flag.CURR)
+    -- Output: lk_grade_schm_lkp --
+    CUST_ID = lk_reporting_Flag.CUST_ID
+    FIELD_NAME = TRIM(lk_reporting_Flag.FIELD_NAME)
+    PREV_VALUE = TRIM(lk_reporting_Flag.PREV)
+    CURR_VALUE = TRIM(lk_reporting_Flag.CURR)
+  Link File (lk_grade_schemlkp): GRADE_SCHEME_LKP_HSH
+  Link File (lk_event_lkp): MIDTERM_EVNT_LKP_HSH
+  Link File (lk_evnt_lkp): MIDTERM_EVNT_LKP_HSH
+  Link File (lk_grade_schm_lkp): GRADE_SCHEME_LKP_HSH
+  Output: → dataset_8 (Rule_Lkps)
+
+// --- [TRANSFORMERSTAGE : xfm_RuleLkps] [Lines 3869-3879] ---
+  Input: ← dataset_16 (Ora_EMPLOYEE_ACTION_CHANGES_RULES) (Link: lk_xfm_RuleLkps)
+  Constraint (lk_grade_schemlkp): lk_xfm_RuleLkps.FIELD_NAME='SCHEME' or lk_xfm_RuleLkps.FIELD_NAME='GRADE'
+  Constraint (lk_event_lkp): lk_xfm_RuleLkps.FIELD_NAME<>'SCHEME'  and lk_xfm_RuleLkps.FIELD_NAME<>'GRADE'
+  StageType: CTransformerStage
+  Transformations:
+    -- Output: lk_grade_schemlkp --
+    CUST_ID = lk_xfm_RuleLkps.CUST_ID
+    FIELD_NAME = lk_xfm_RuleLkps.FIELD_NAME
+    PREV_VALUE = lk_xfm_RuleLkps.PREV_VALUE
+    CURR_VALUE = lk_xfm_RuleLkps.CURR_VALUE
+    REPORTING_FLAG = lk_xfm_RuleLkps.REPORTING_FLAG
+    -- Output: lk_event_lkp --
+    CUST_ID = lk_xfm_RuleLkps.CUST_ID
+    FIELD_NAME = lk_xfm_RuleLkps.FIELD_NAME
+    PREV_VALUE = lk_xfm_RuleLkps.PREV_VALUE
+    CURR_VALUE = lk_xfm_RuleLkps.CURR_VALUE
+  Output: → dataset_9 (xfm_RuleLkps)
+
+// --- [CUSTOMSTAGE : Ora_STG_F_BARCLAYS_MIDTERM] [Lines 4206-4321] ---
+  Input: ← dataset_4 (Xfm_UpdStgbarclayMidterm) (Link: UpdStgbarclayMidterm)
+  StageType: OracleConnector
+  Output: → dataset_10 (Ora_STG_F_BARCLAYS_MIDTERM)
+
+// --- [CUSTOMSTAGE : Ora_STG_EMPLOYEE_CHANGES_REPORTING] [Lines 4380-4503] ---
+  Input: ← dataset_5 (xfm_Employee_Changes_reporting) (Link: lk_Ora_STG_EMPLOYEE_CHANGES_REPORTING)
+  StageType: OracleConnector
+  SQL:
+    SELECT CUST_ID, DRIVER_ID_NO, CURR_GRADE, CASE WHEN ROW_ID=1 THEN 'SCHEME' WHEN ROW_ID=2 THEN 'GRADE' WHEN ROW_ID=3 THEN 'ALL_EMP_CAN_QUOTE' WHEN ROW_ID=4 THEN 'ALL_EMP_CAN_ORDER' WHEN ROW_ID=5 THEN 'ALL_EMP_AUTHORISE_TYPE' WHEN ROW_ID=6 THEN 'ALL_EMP_TERMINATE_VEHICLE' WHEN ROW_ID=7 THEN 'ALL_EMP_CALL_BARCLAYS_HR' WHEN ROW_ID=8 THEN 'NEEDS_CAN_QUOTE' WHEN ROW_ID=9 THEN 'NEEDS_CAN_ORDER' WHEN ROW_ID=10 THEN 'NEEDS_AUTHORISE_TYPE' WHEN ROW_ID=11 THEN 'NEEDS_TERMINATE_VEHICLE' WHEN ROW_ID=12 THEN 'NEEDS_CALL_BARCLAYS_HR' ELSE '' END AS FIELD_NAME, REGEXP_SUBSTR(PREV,'[^,]+',1,row_id) as prev, REGEXP_SUBSTR(CURR,'[^,]+',1,row_id) as curr, COUNT_CALC_QUOTE, COUNT_SUBMITTED_QUOTE, COUNT_CLIENT_AUTH_QUOTE, LIVE_ORDER_STATUS, LIVE_VEHICLE_STATUS, CHANGE_CODE, NEW_EMPLOYEE_FLAG, DROPPED_FROM_NEEDS_FLAG FROM ( SELECT CUST_ID,DRIVER_ID_NO,CURR_GRADE,PREV,CURR,COUNT_CALC_QUOTE,COUNT_SUBMITTED_QUOTE,COUNT_CLIENT_AUTH_QUOTE,LIVE_ORDER_STATUS,LIVE_VEHICLE_STATUS,CHANGE_CODE,NEW_EMPLOYEE_FLAG,DROPPED_FROM_NEEDS_FLAG,ROW_NUMBER() OVER (PARTITION BY CUST_ID,DRIVER_ID_NO ORDER BY CUST_ID,DRIVER_ID_NO) AS ROW_ID FROM ( SELECT CUST_ID,DRIVER_ID_NO,CURR_GRADE,prev_grade||','||prev_JOB_title||','||','||','||','||',' as PREV, curr_grade||','||curr_JOB_title||','||ALL_EMP_CAN_QUOTE||','||ALL_EMP_CAN_ORDER||','||ALL_EMP_AUTHORISE_TYPE||','||ALL_EMP_TERMINATE_VEHICLE||','||ALL_EMP_CALL_BARCLAYS_HR|| ','||NEEDS_CAN_QUOTE||','||NEEDS_CAN_ORDER||','||NEEDS_AUTHORISE_TYPE||','||NEEDS_TERMINATE_VEHICLE||','||NEEDS_CALL_BARCLAYS_HR AS CURR,COUNT_CALC_QUOTE,COUNT_SUBMITTED_QUOTE,COUNT_CLIENT_AUTH_QUOTE,LIVE_ORDER_STATUS,LIVE_VEHICLE_STATUS,CHANGE_CODE,NEW_EMPLOYEE_FLAG,DROPPED_FROM_NEEDS_FLAG from STAGE_OPR.STG_EMPLOYEE_CHANGES_REPORTING CROSS JOIN (SELECT LEVEL I FROM DUAL CONNECT BY LEVEL <=12))) -- WHERE DRIVER_ID_NO ='00000000000005043154';
+  Output: → dataset_11 (Ora_STG_EMPLOYEE_CHANGES_REPORTING)
+
+// --- [HASHEDFILESTAGE : HSH_TEMP_STGVAR_EMPLOYEE_CODE_CHNG] [Lines 5025-5031] ---
+  Input: ← dataset_6 (xfm_Reporting_flag) (Link: To_HSH_TEMP)
+  StageType: CHashedFileStage
+  Link File (To_HSH_TEMP): HSH_TEMP_STGVAR_EMPLOYEE_CODE_CHNG
+  Output: → dataset_12 (HSH_TEMP_STGVAR_EMPLOYEE_CODE_CHNG)
+
+// --- [CUSTOMSTAGE : ora_NOLSData] [Lines 5043-5228] ---
+  StageType: OracleConnector
+  SQL:
+    SELECT CUST_ID,DRIVER_ID_NO,CURR_EMPLOYEE_CHANGE_CODE,COMMENTRY, LISTAGG(CHANGE,'') WITHIN GROUP(ORDER BY ROW_ID) AS CHANGE,CURR_GRADE,PREV_GRADE,CURR_JOB_TITLE,PREV_JOB_TITLE FROM (SELECT CUST_ID,DRIVER_ID_NO,PREV_EMPLOYEE_CHANGE_CODE,CURR_EMPLOYEE_CHANGE_CODE,ROW_ID,COMMENTRY,CURR_GRADE,PREV_GRADE,CURR_JOB_TITLE,PREV_JOB_TITLE, CASE WHEN SUBSTR(NVL(PREV_EMPLOYEE_CHANGE_CODE,''),ROW_ID,1)<>SUBSTR(CURR_EMPLOYEE_CHANGE_CODE,ROW_ID,1) THEN 'Y' ELSE 'N' END AS CHANGE FROM (SELECT CUST_ID,DRIVER_ID_NO,PREV_EMPLOYEE_CHANGE_CODE,CURR_EMPLOYEE_CHANGE_CODE,COMMENTRY,CURR_GRADE,PREV_GRADE,CURR_JOB_TITLE,PREV_JOB_TITLE,ROW_NUMBER() OVER (PARTITION BY CUST_ID,DRIVER_ID_NO,PREV_EMPLOYEE_CHANGE_CODE,CURR_GRADE,PREV_GRADE,CURR_JOB_TITLE,PREV_JOB_TITLE ORDER BY PREV_EMPLOYEE_CHANGE_CODE) ROW_ID FROM ((SELECT CUST_ID,DRIVER_ID_NO,CURR_EMPLOYEE_CHANGE_CODE,PREV_EMPLOYEE_CHANGE_CODE,CURR_GRADE,PREV_GRADE,CURR_JOB_TITLE,PREV_JOB_TITLE, LISTAGG(NVL(DESCRIPTION,'~'),';') WITHIN GROUP (ORDER BY POSITION) COMMENTRY FROM (SELECT DISTINCT CURR.CUST_ID,CURR.DRIVER_ID_NO, TRIM(CURR.FULL_MID_TERM_EVENT_CODE)|| (CASE WHEN (PREV.GRADE_SK IS NULL AND UPPER(CURR.GRADE_DESC)='NEEDS') OR E.EVENT_DETAILS LIKE 'New Starter%' THEN 'Y' ELSE 'N' END )|| (CASE WHEN UPPER(CURR.GRADE_DESC)='NEEDS' THEN 'N' WHEN UPPER(CURR.GRADE_DESC)='ALL EMPLOYEES' THEN 'A' ELSE 'I' END)|| (CASE WHEN UPPER(PREV.DRIVER_GRADE_JOB_TITLE)<>UPPER(CURR.DRIVER_GRADE_JOB_TITLE) THEN 'Y' ELSE 'N' END)|| --(CASE WHEN (UPPER(PREV.GRADE_DESC) = 'NEEDS' AND UPPER(CURR.GRADE_DESC) = 'ALL EMPLOYEES') THEN 'Y' ELSE 'N' END) (CASE WHEN UPPER(E.FIELD_NAME)='DROPOFFS' THEN 'Y' ELSE 'N' END) AS CURR_EMPLOYEE_CHANGE_CODE, NVL(PREV.EMPLOYEE_CHANGE_CODE,' ') AS PREV_EMPLOYEE_CHANGE_CODE, UPPER(PREV.GRADE_DESC) AS PREV_GRADE, UPPER(CURR.GRADE_DESC) AS CURR_GRADE, PREV.GRADE_SK AS PREV_GRADE_SK, CURR.GRADE_SK AS CURR_GRADE_SK, CURR.DRIVER_GRADE_JOB_TITLE AS CURR_JOB_TITLE, PREV.DRIVER_GRADE_JOB_TITLE AS PREV_JOB_TITLE, (CASE WHEN (PREV.GRADE_SK IS NULL AND UPPER(CURR.GRADE_DESC)='NEEDS') OR E.EVENT_DETAILS LIKE 'New Starter%' THEN 'Y' ELSE 'N' END ) NEW_EMPLOYEE_FLAG, (CASE WHEN UPPER(CURR.GRADE_DESC)='NEEDS' THEN 'N' WHEN UPPER(CURR.GRADE_DESC)='ALL EMPLOYEES' THEN 'A' ELSE 'I' END) SCHEME_CHANGE_FLAG, (CASE WHEN UPPER(PREV.DRIVER_GRADE_JOB_TITLE)<>UPPER(CURR.DRIVER_GRADE_JOB_TITLE) THEN 'Y' ELSE 'N' END) GRADE_CHANGE_FLAG, --(CASE WHEN (UPPER(PREV.GRADE_DESC) = 'NEEDS' AND UPPER(CURR.GRADE_DESC) = 'ALL EMPLOYEES') THEN 'Y' ELSE 'N' END) DROPPED_FROM_NEEDS_FLAG CASE WHEN UPPER(E.FIELD_NAME)='DROPOFFS' THEN 'Y' ELSE 'N' END DROPPED_FROM_NEEDS_FLAG FROM (SELECT STG.CUST_ID,STG.DRIVER_ID_NO,STG.GRADE_SK,CDG.GRADE_DESC,STG.DRIVER_GRADE_JOB_TITLE,TRIM(FULL_MID_TERM_EVENT_CODE) AS FULL_MID_TERM_EVENT_CODE FROM STAGE_OPR.STG_F_BARCLAYS_MIDTERM_HIST STG LEFT OUTER JOIN CDM_OWNER.CUST_DRIVER_GRADE_DIM CDG ON STG.GRADE_SK=CDG.GRADE_SK AND STG.CUST_ID =CDG.CUST_ID AND STG.CUST_ID =#pClient_No# AND CDG.CUST_ID =#pClient_No#) CURR LEFT OUTER JOIN (SELECT F.CUST_ID,F.DRIVER_ID_NO,F.GRADE_SK,CDG.GRADE_DESC,F.DRIVER_GRADE_JOB_TITLE,NVL(FULL_MID_TERM_EVENT_CODE,' ') AS FULL_MID_TERM_EVENT_CODE ,NVL(EMPLOYEE_CHANGE_CODE,' ') AS EMPLOYEE_CHANGE_CODE,F.CHANGE_CAPTURE_DATE_SK FROM OPR_OWNER.F_BARCLAYS_MIDTERM_HIST F LEFT OUTER JOIN CDM_OWNER.CUST_DRIVER_GRADE_DIM CDG ON F.GRADE_SK=CDG.GRADE_SK AND F.CUST_ID =CDG.CUST_ID AND F.CUST_ID =#pClient_No# AND CDG.CUST_ID =#pClient_No# WHERE F.LATEST_FLAG='Y' ) PREV ON PREV.CUST_ID = CURR.CUST_ID AND PREV.DRIVER_ID_NO = CURR.DRIVER_ID_NO LEFT OUTER JOIN ( SELECT DRIVER_ID_NO,REC_CREATED_TIME,EVENT_DETAILS,FIELD_NAME,ROW_NUMBER() OVER (PARTITION BY DRIVER_ID_NO,REC_CREATED_TIME,EVENT_DETAILS,FIELD_NAME ORDER BY DRIVER_ID_NO) RN FROM EXT_OWNER.DRIVER_UPLOAD_EMAIL_DETAILS WHERE (DRIVER_ID_NO,REC_CREATED_TIME) IN (SELECT DRIVER_ID_NO,MAX(REC_CREATED_TIME) AS REC_CREATED_TIME FROM EXT_OWNER.DRIVER_UPLOAD_EMAIL_DETAILS E WHERE CLIENT_NO = #pClient_No# AND (EVENT_DETAILS LIKE 'New Starter%' OR UPPER(FIELD_NAME)='DROPOFFS') AND STATUS_FLAG='P' GROUP BY DRIVER_ID_NO ) AND CLIENT_NO = #pClient_No# AND (EVENT_DETAILS LIKE 'New Starter%' OR UPPER(FIELD_NAME)='DROPOFFS') AND STATUS_FLAG='P' ) E ON CURR.DRIVER_ID_NO = E.DRIVER_ID_NO AND TO_DATE(PREV.CHANGE_CAPTURE_DATE_SK,'YYYYMMDD') < TO_DATE(SUBSTR(TRIM(E.REC_CREATED_TIME),1,10),'YYYY-MM-DD') and RN=1 ) T2,STAGE_OPR.STG_EMPLOYEE_ACTION_NARRATIVE T1 WHERE T1.CHANGE_CODE=SUBSTR(T2.CURR_EMPLOYEE_CHANGE_CODE,POSITION,1) --AND CURR.DRIVER_ID_NO IN ('00000000000005035437') GROUP BY CUST_ID,DRIVER_ID_NO,CURR_EMPLOYEE_CHANGE_CODE,PREV_EMPLOYEE_CHANGE_CODE,CURR_GRADE,PREV_GRADE,CURR_JOB_TITLE,PREV_JOB_TITLE ORDER BY 1 DESC,2)) CROSS JOIN (SELECT LEVEL L FROM DUAL CONNECT BY LEVEL <= 18)T1)T1)T1 GROUP BY CUST_ID,DRIVER_ID_NO,PREV_EMPLOYEE_CHANGE_CODE,CURR_EMPLOYEE_CHANGE_CODE,COMMENTRY,CURR_GRADE,PREV_GRADE,CURR_JOB_TITLE,PREV_JOB_TITLE
+  Output: → dataset_13 (ora_NOLSData)
+
+// --- [CUSTOMSTAGE : OraD_BARCLAYS_EMPLOYEE_ACTION] [Lines 5525-5642] ---
+  StageType: OracleConnector
+  SQL:
+    SELECT nvl(BARCLAYS_EMPLOYEE_ACTION_BK,-99) as BARCLAYS_EMPLOYEE_ACTION_BK, NVL(BARCLAYS_EMPLOYEE_ACTION_SK,-99) as BARCLAYS_EMPLOYEE_ACTION_SK FROM OPR_OWNER.D_BARCLAYS_EMPLOYEE_ACTION
+  Transformations:
+    -- Output: lk_OraD_BARCLAYS_EMPLOYEE_ACTION --
+    BARCLAYS_EMPLOYEE_ACTION_BK = TRIM(lnkTfmEmpMidTermHistInfo1.CHANGE)
+  Output: → dataset_14 (OraD_BARCLAYS_EMPLOYEE_ACTION)
+
+// --- [CUSTOMSTAGE : ora_STG_F_BARCLAYS_MIDTERM_HIST] [Lines 5754-5896] ---
+  StageType: OracleConnector
+  SQL:
+    SELECT CUST_ID, DRIVER_ID_NO, ALL_EMP_CAN_QUOTE, ALL_EMP_CAN_ORDER, ALL_EMP_AUTHORISE_TYPE, ALL_EMP_TERMINATE_VEHICLE, ALL_EMP_CALL_BARCLAYS_HR, NEEDS_CAN_QUOTE, NEEDS_CAN_ORDER, NEEDS_AUTHORISE_TYPE, NEEDS_TERMINATE_VEHICLE, NEEDS_CALL_BARCLAYS_HR, NVL(COUNT_CALC_QUOTE,0), NVL(COUNT_SUBMITTED_QUOTE,0), NVL(COUNT_CLIENT_AUTH_QUOTE,0), CASE WHEN NVL(ORD_STAT.ORDER_STATUS_SK,-99) <>-99 THEN 'Y' ELSE 'N' END AS LIVE_ORDER_STATUS, CASE WHEN NVL(VEH.VEHICLE_OBJECT_STATUS_SK,-99) <> -99 THEN 'Y' ELSE 'N' END AS LIVE_VEHICLE_STATUS FROM STAGE_OPR.STG_F_BARCLAYS_MIDTERM_HIST F LEFT OUTER JOIN CDM_OWNER.ORDER_STATUS_DIM ORD_STAT ON ORD_STAT.ORDER_STATUS_SK = F.ORDER_STATUS_SK AND ORD_STAT.ORDER_STATUS_CODE in (2,3,4,5,6) LEFT OUTER JOIN CDM_OWNER.VEHICLE_OBJECT_STATUS_DIM VEH ON VEH.VEHICLE_OBJECT_STATUS_SK= F.VEHICLE_OBJECT_STATUS_SK AND VEHICLE_OBJECT_STATUS_CODE IN (1,8)
+  Output: → dataset_15 (ora_STG_F_BARCLAYS_MIDTERM_HIST)
+
+// --- [CUSTOMSTAGE : Ora_EMPLOYEE_ACTION_CHANGES_RULES] [Lines 6425-6555] ---
+  StageType: OracleConnector
+  SQL:
+    SELECT CUST_ID, FIELD_NAME, PREV_VALUE, CURR_VALUE, EFFECTIVE_START_DATE, EFFECTIVE_END_DATE, COMMENTS, REPORTING_FLAG, CREATED_ON, CREATED_BY, UPDATE_ON, UPDATED_BY FROM OPR_OWNER.EMPLOYEE_ACTION_CHANGES_RULES WHERE EFFECTIVE_START_DATE<=SYSDATE AND EFFECTIVE_END_DATE>=SYSDATE AND REPORTING_FLAG ='Y'
+  Output: → dataset_16 (Ora_EMPLOYEE_ACTION_CHANGES_RULES)
+
+// --- [TRANSFORMERSTAGE : tfmLookupSubmittedCount] [Lines 6960-6993] ---
+  Input: ← dataset_13 (ora_NOLSData) (Link: lnkTfmEmpMidTermHistInfo1)
+  Input: ← dataset_2 (HSH_BARCLAYS_EMPLOYEE_ACTION) (Link: lkHshBarclaysEmployeeAction)
+  Input: ← dataset_3 (HSH_STG_F_BARCLAYS_MIDTERM_HIST) (Link: lk_stg_midterm_hist_ref)
+  Stage Variables:
+    StageVar svCommentry = rtGetEmpChngComm( lnkTfmEmpMidTermHistInfo1.CHANGE,lnkTfmEmpMidTermHistInfo1.CURR_EMPLOYEE_CHANGE_CODE, lnkTfmEmpMidTermHistInfo1.COMMENTRY, lnkTfmEmpMidTermHistInfo1.CURR_GRADE)
+    StageVar svAllEmplNewRec = If UPCASE(lnkTfmEmpMidTermHistInfo1.CURR_GRADE)='ALL EMPLOYEES' AND SUBSTRINGS(TRIM(lnkTfmEmpMidTermHistInfo1.CHANGE),15,1)='Y' Then 'Y' Else 'N'
+  Constraint (lk_xfm_Employee_Changes_reporting): lnkTfmEmpMidTermHistInfo1.CHANGE<> 'NNNNNNNNNNNNNNNNNN'  AND svAllEmplNewRec='N'
+  StageType: CTransformerStage
+  Transformations:
+    -- Output: lk_HSH_MIDTERM_HIST --
+    CUST_ID = lnkTfmEmpMidTermHistInfo1.CUST_ID
+    DRIVER_ID_NO = lnkTfmEmpMidTermHistInfo1.DRIVER_ID_NO
+    CHANGE_COMMENTARY = svCommentry
+    EMPLOYEE_CHANGE_CODE = lnkTfmEmpMidTermHistInfo1.CURR_EMPLOYEE_CHANGE_CODE
+    BARCLAYS_EMPLOYEE_ACTION_SK = IF TRIM(NullToEmpty(lkHshBarclaysEmployeeAction.BARCLAYS_EMPLOYEE_ACTION_SK)) ='' then -99 else lkHshBarclaysEmployeeAction.BARCLAYS_EMPLOYEE_ACTION_SK
+    CURR_GRADE = lnkTfmEmpMidTermHistInfo1.CURR_GRADE
+    PREV_GRADE = lnkTfmEmpMidTermHistInfo1.PREV_GRADE
+    CURR_JOB_TITLE = lnkTfmEmpMidTermHistInfo1.CURR_JOB_TITLE
+    PREV_JOB_TITLE = lnkTfmEmpMidTermHistInfo1.PREV_JOB_TITLE
+    CHANGE_CAPTURE_DATE_SK = DSJobStartDate
+    ALL_EMP_CAN_QUOTE = lk_stg_midterm_hist_ref.ALL_EMP_CAN_QUOTE
+    ALL_EMP_CAN_ORDER = lk_stg_midterm_hist_ref.ALL_EMP_CAN_ORDER
+    ALL_EMP_AUTHORISE_TYPE = lk_stg_midterm_hist_ref.ALL_EMP_AUTHORISE_TYPE
+    ALL_EMP_TERMINATE_VEHICLE = lk_stg_midterm_hist_ref.ALL_EMP_TERMINATE_VEHICLE
+    NEEDS_CAN_QUOTE = lk_stg_midterm_hist_ref.NEEDS_CAN_QUOTE
+    NEEDS_CAN_ORDER = lk_stg_midterm_hist_ref.NEEDS_CAN_ORDER
+    -- Output: lk_xfm_Employee_Changes_reporting --
+    CUST_ID = lnkTfmEmpMidTermHistInfo1.CUST_ID
+    DRIVER_ID_NO = lnkTfmEmpMidTermHistInfo1.DRIVER_ID_NO
+    BARCLAYS_EMPLOYEE_ACTION_SK = IF TRIM(NullToEmpty(lkHshBarclaysEmployeeAction.BARCLAYS_EMPLOYEE_ACTION_SK)) ='' then -99 else lkHshBarclaysEmployeeAction.BARCLAYS_EMPLOYEE_ACTION_SK
+    CURR_GRADE = lnkTfmEmpMidTermHistInfo1.CURR_GRADE
+    PREV_GRADE = lnkTfmEmpMidTermHistInfo1.PREV_GRADE
+    CURR_JOB_TITLE = lnkTfmEmpMidTermHistInfo1.CURR_JOB_TITLE
+    PREV_JOB_TITLE = lnkTfmEmpMidTermHistInfo1.PREV_JOB_TITLE
+    ALL_EMP_CAN_QUOTE = lk_stg_midterm_hist_ref.ALL_EMP_CAN_QUOTE
+    ALL_EMP_CAN_ORDER = lk_stg_midterm_hist_ref.ALL_EMP_CAN_ORDER
+    ALL_EMP_AUTHORISE_TYPE = lk_stg_midterm_hist_ref.ALL_EMP_AUTHORISE_TYPE
+    ALL_EMP_TERMINATE_VEHICLE = lk_stg_midterm_hist_ref.ALL_EMP_TERMINATE_VEHICLE
+    ALL_EMP_CALL_BARCLAYS_HR = lk_stg_midterm_hist_ref.ALL_EMP_CALL_BARCLAYS_HR
+    NEEDS_CAN_QUOTE = lk_stg_midterm_hist_ref.NEEDS_CAN_QUOTE
+    NEEDS_CAN_ORDER = lk_stg_midterm_hist_ref.NEEDS_CAN_ORDER
+    NEEDS_AUTHORISE_TYPE = lk_stg_midterm_hist_ref.NEEDS_AUTHORISE_TYPE
+    NEEDS_TERMINATE_VEHICLE = lk_stg_midterm_hist_ref.NEEDS_TERMINATE_VEHICLE
+    NEEDS_CALL_BARCLAYS_HR = lk_stg_midterm_hist_ref.NEEDS_CALL_BARCLAYS_HR
+    COUNT_CALC_QUOTE = lk_stg_midterm_hist_ref.COUNT_CALC_QUOTE
+    COUNT_SUBMITTED_QUOTE = lk_stg_midterm_hist_ref.COUNT_SUBMITTED_QUOTE
+    COUNT_CLIENT_AUTH_QUOTE = lk_stg_midterm_hist_ref.COUNT_CLIENT_AUTH_QUOTE
+    LIVE_ORDER_STATUS = lk_stg_midterm_hist_ref.LIVE_ORDER_STATUS
+    LIVE_VEHICLE_STATUS = lk_stg_midterm_hist_ref.LIVE_VEHICLE_STATUS
+    CHANGE = lnkTfmEmpMidTermHistInfo1.CHANGE
+    NEW_EMPLOYEE_FLAG = SUBSTRINGS(lnkTfmEmpMidTermHistInfo1.CURR_EMPLOYEE_CHANGE_CODE,15,1)
+    DROPPED_FROM_NEEDS_FLAG = SUBSTRINGS(lnkTfmEmpMidTermHistInfo1.CURR_EMPLOYEE_CHANGE_CODE,18,1)
+  Output: → dataset_17 (tfmLookupSubmittedCount)
