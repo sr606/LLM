@@ -1,0 +1,56 @@
+// ======================================================================
+// PSEUDOCODE: Samle_Job2 1 2.xml
+// ======================================================================
+
+// --- [TRANSFORMERSTAGE : TrExceptionReport] [Lines 127-149] ---
+  Input: ← dataset_5 (HF_I247_GARAGE_MAPPING) (Link: lkI247GarageMappingExists)
+  Input: ← dataset_3 (LkpVorExceptionReports) (Link: LkpExceptionReport)
+  Stage Variables:
+    StageVar svInsUpd = If Not(IsNULL(lkI247GarageMappingExists.FROM_I247_GARAGE_NAME)) then 'U' ELSE 'N'
+  Constraint (lkIns): svInsUpd='U'
+  StageType: CTransformerStage
+  Transformations:
+    -- Output: lkIns --
+    GARAGE_NAME = LkpExceptionReport.GARAGE_NAME
+    RESOLVED_DATE = lkI247GarageMappingExists.CREATED_ON
+  Output: → dataset_1 (TrExceptionReport)
+
+// --- [CUSTOMSTAGE : VorExceptionReports] [Lines 241-364] ---
+  Input: ← dataset_1 (TrExceptionReport) (Link: lkIns)
+  StageType: OracleConnector
+  SQL:
+    SELECT WORKSHEET_NUMBER,ORIGINAL_WORKSHEET_NUMBER,REGISTRATION_NUMBER,GARAGE_NAME,DESCRIPTION FROM Supplierdata_ext.VOR_EXCEPTIONS WHERE RESOLVED_DATE IS NULL;
+  Output: → dataset_2 (VorExceptionReports)
+
+// --- [CUSTOMSTAGE : LkpVorExceptionReports] [Lines 631-749] ---
+  StageType: OracleConnector
+  SQL:
+    SELECT worksheet_number,original_worksheet_number,registration_number, GARAGE_NAME FROM Supplierdata_ext.VOR_EXCEPTIONS WHERE RESOLVED_DATE IS NULL;
+  Output: → dataset_3 (LkpVorExceptionReports)
+
+// --- [SEQFILESTAGE : VOR_EXCEPTIONS_FILE] [Lines 910-920] ---
+  Input: ← dataset_2 (VorExceptionReports) (Link: lkExceptionReport)
+  UnixFormat: 1
+  PipeStage: 0
+  UnicodeBOM: 1
+  UnicodeSwapped: 1
+  WithFilter: 0
+  StageType: CSeqFileStage
+  Link File (lkExceptionReport): #pSMROutputPath#/#pVOR_Exception_Report#_#pFiledate#.csv
+  Output: → dataset_4 (VOR_EXCEPTIONS_FILE)
+
+// --- [HASHEDFILESTAGE : HF_I247_GARAGE_MAPPING] [Lines 952-959] ---
+  Input: ← dataset_6 (Src_VOR_I247_GARAGE_MAPPING) (Link: LkpCorrectionExists)
+  StageType: CHashedFileStage
+  Transformations:
+    -- Output: lkI247GarageMappingExists --
+    FROM_I247_GARAGE_NAME = LkpExceptionReport.GARAGE_NAME
+  Link File (LkpCorrectionExists): HF_I247_GARAGE_MAPPING_EXCEPTIONS
+  Link File (lkI247GarageMappingExists): HF_I247_GARAGE_MAPPING_EXCEPTIONS
+  Output: → dataset_5 (HF_I247_GARAGE_MAPPING)
+
+// --- [CUSTOMSTAGE : Src_VOR_I247_GARAGE_MAPPING] [Lines 1038-1153] ---
+  StageType: OracleConnector
+  SQL:
+    select FROM_I247_GARAGE,CREATED_ON from SUPPLIERDATA_EXT.VOR_I247_GARAGE_MAPPING;
+  Output: → dataset_6 (Src_VOR_I247_GARAGE_MAPPING)
