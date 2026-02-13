@@ -1,0 +1,82 @@
+// ======================================================================
+// PSEUDOCODE: Sample_Job1 1 2.xml
+// ======================================================================
+
+// --- [CUSTOMSTAGE : ORA_Ext_Vehicle_Off_Road_Data] [Lines 171-476] ---
+  StageType: OracleConnector
+  SQL:
+    select /*+Parallel (5)*/ WORKSHEET_NUMBER, ORIGINAL_WORKSHEET_NUMBER, VOR_PROGRESS_SK, NVL (cd.cust_driver_sk, -99) AS REGISTERED_CUST_DRIVER_SK, SRC.VEHICLE_SK AS VEHICLE_SK, variant_sk, (Case WHEN CAPTURED_garage_name is null then -98 when supp_smr.supp_sk is not null and supp_smr.lkp_key='A' then supp_smr.supp_sk when supp_nols.supp_sk is not null AND supp_nols.lkp_key='A' then supp_nols.supp_sk when supp_smr.supp_sk is not null and supp_smr.lkp_key='B' then -97 when supp_nols.supp_sk is not null and supp_nols.lkp_key='B' then -97 Else -99 end) as SUPP_SK, CUSTOMER_SK, RENTAL_BOOKING_SK, RENTAL_BOOKING_REFERENCE, VOR_NOTE_SK, ORIGINAL_APPOINTMENT_DATE_SK, JOB_CLOSED_DATE_SK, VOR_PASSED_DATE_SK, DRIVER_COLLECTION_DATE_SK, VOR_REGISTRATION_NUMBER, CAPTURED_GARAGE_NAME, CONTACT_DRIVER_NAME, MILEAGE, VOR_INCIDENT_SOURCE, VOR_WORK, CRS_LOG_ID, NUMBER_OF_WORKING_DAYS_VOR, NUMBER_OF_DAYS_VOR, COMPLETION_TO_COLLECT_DAYS FROM (SELECT vor.worksheet_number as worksheet_number, NVL (vor.original_worksheet_number,'N/A') AS ORIGINAL_WORKSHEET_NUMBER, NVL (vnrr.vor_progress_sk, -99) AS vor_progress_sk, (CASE WHEN v.vehicle_sk IS NOT NULL THEN v.vehicle_sk WHEN VN.VEHICLE_SK IS NOT NULL THEN VN.VEHICLE_SK ELSE -99 END) AS vehicle_sk, (CASE WHEN v.variant_sk IS NOT NULL THEN v.variant_sk WHEN VN.variant_sk IS NOT NULL THEN VN.variant_sk ELSE -99 END) AS variant_sk, (CASE WHEN V.OBJECT_NO IS NOT NULL THEN V.OBJECT_NO WHEN VN.OBJECT_NO IS NOT NULL THEN VN.OBJECT_NO ELSE NULL END) AS OBJECT_NO, NVL (cust.cust_sk, -99) AS customer_sk, NVL(b.booking_id, -99) AS RENTAL_BOOKING_SK, b.booking_reference as rental_booking_reference, NVL (note.vor_note_sk, -99) AS vor_note_sk, NVL(TO_CHAR (TO_DATE (vor.original_appointment_date, 'DD/MM/YYYY'), 'YYYYMMDD'),'19000101') AS original_appointment_date_sk, CASE WHEN vor.work_finish_date IS NULL THEN '99991231' WHEN vor.work_finish_date='In Progress' THEN '99991231' ELSE TO_CHAR (TO_DATE (vor.work_finish_date, 'DD/MM/YYYY'), 'YYYYMMDD') END AS JOB_CLOSED_DATE_SK, NVL (TO_CHAR (TO_DATE (vor.vor_passed_date, 'DD/MM/YYYY'), 'YYYYMMDD'), '99991231' ) as VOR_PASSED_DATE_SK, NVL (TO_CHAR (TO_DATE (vor.driver_collection_date, 'DD/MM/YYYY'), 'YYYYMMDD'), '99991231' ) as driver_collection_date_sk, vor.registration_number as VOR_REGISTRATION_NUMBER, (CASE WHEN GM.MAPPED_TO_GARAGE IS NOT NULL THEN GM.MAPPED_TO_GARAGE ELSE vor.garage_name end) as captured_garage_name, vor.driver_name as contact_driver_name, vor.mileage as mileage, vor.vor_incident_source, vor.work_info as VOR_WORK, NVL(vor.crs_reference_no,'N/A') as crs_log_id, vor.working_days_vor as number_of_working_days_vor, vor.number_of_days_vor as number_of_days_vor , vor.completion_to_collection_days as COMPLETION_TO_COLLECT_DAYS, INCIDENT_CREATION_DATE FROM (SELECT worksheet_number, original_worksheet_number, original_appointment_date, work_finish_date, vor_passed_date, driver_collection_date, registration_number, garage_name, driver_name, mileage, vor_incident_source, work_info, crs_reference_no, working_days_vor, number_of_days_vor, completion_to_collection_days, INCIDENT_CREATION_DATE, nols_customer_number, ( CASE WHEN rental_number IS NULL THEN '-99' WHEN DW_OWNER.F_IS_NUMBER(RENTAL_NUMBER)=1 THEN RENTAL_NUMBER ELSE '-99' END) AS RENTAL_NUMBER,LAST_UPDATED_ON FROM supplierdata_ext.vor_vehicle_off_road VOR ) vor LEFT OUTER JOIN smr_owner.d_vor_progress vnrr ON vor.original_worksheet_number = vnrr.original_worksheet_number and VNRR.LATEST_FLAG='Y' LEFT OUTER JOIN (select vehicle_sk,variant_sk, registration_no,OBJECT_NO,CUST_ID,EFFECTIVE_START_DATE,EFFECTIVE_END_DATE,ETL_TERMINATED_DATE FROM cdm_owner.vehicle_dim v WHERE UPPER(V.BRAND)<>'NETWORK' )V ON vor.registration_number = v.registration_no AND VOR.NOLS_CUSTOMER_NUMBER=V.CUST_ID and TO_DATE (VOR.INCIDENT_CREATION_DATE, 'DD/MM/YYYY') between v.EFFECTIVE_START_DATE and V.EFFECTIVE_END_DATE LEFT OUTER JOIN (select vehicle_sk,variant_sk, registration_no,OBJECT_NO,CUST_ID,EFFECTIVE_START_DATE,EFFECTIVE_END_DATE,ETL_TERMINATED_DATE FROM cdm_owner.vehicle_dim v WHERE UPPER(V.BRAND)='NETWORK' ) VN ON vor.registration_number = VN.registration_no AND VOR.NOLS_CUSTOMER_NUMBER=VN.CUST_ID and TO_DATE (VOR.INCIDENT_CREATION_DATE, 'DD/MM/YYYY') between VN.EFFECTIVE_START_DATE and VN.EFFECTIVE_END_DATE LEFT OUTER JOIN cdm_owner.customer_dim cust ON cust.cust_id = vor.nols_customer_number AND cust.latest_flag = 'Y' LEFT OUTER JOIN ldrdw.bookings b ON vor.rental_number =b.booking_reference LEFT OUTER JOIN smr_owner.d_vor_note note ON vor.worksheet_number = note.worksheet_number AND NOTE.LAST_RECORD ='Y' LEFT OUTER JOIN SUPPLIERDATA_EXT.VOR_I247_GARAGE_MAPPING GM ON GM.FROM_I247_GARAGE= VOR.GARAGE_NAME WHERE VOR.LAST_UPDATED_ON>=TO_DATE('#PREV_BATCH_RUN_DATE_VOR#','YYYY-MM-DD')-#DELTA_DAYS_PARAM#) SRC LEFT JOIN (SELECT distinct driver_id_no,VEHICLE_SK,OBJECT_NO,DRIVER_START_DATE,DRIVER_END_DATE from CDM_OWNER.driver_alloc_veh_dim dav ORDER BY DRIVER_ID_NO ) dav ON SRC.object_no = dav.object_no -- AND SRC.vehicle_sk = dav.vehicle_sk AND TO_DATE(INCIDENT_CREATION_DATE,'DD/MM/YYYY') between DAV.DRIVER_START_DATE and DAV.DRIVER_END_DATE LEFT OUTER JOIN cdm_owner.cust_driver_dim cd ON cd.cust_driver_id = dav.driver_id_no AND cd.latest_flag = 'Y' LEFT OUTER JOIN /*To give prioity to SMR than NOLS suppliers and to find duplicates*/ (select supp_sk,supp_name,lkp_key from (SELECT supp_sk , supp_name, 'A' AS LKP_KEY FROM ( SELECT sd.supp_sk , sd.supp_name, COUNT (sd.supp_name) OVER (PARTITION BY sd.supp_name) AS record_count FROM cdm_owner.supplier_dim sd WHERE sd.latest_flag = 'Y' AND sd.delete_flag = 'N' and sd.supp_type='SMR' AND SUPP_ID IN ( select SITE_ID from supplierdata_ext.ONELINK_SUPPLIER_NETWORK where latest_record='Y' AND PREFERENCE_LEVEL <>'D' ) ) WHERE record_count = 1 UNION ALL SELECT supp_sk , supp_name, 'B' AS LKP_KEY FROM ( SELECT sd.supp_sk , sd.supp_id, sd.supp_name, row_number() over(partition by sd.supp_name order by sd.supp_name) as row_val, COUNT (sd.supp_name) OVER (PARTITION BY sd.supp_name) AS record_count FROM cdm_owner.supplier_dim sd WHERE sd.latest_flag = 'Y' AND sd.delete_flag = 'N' and sd.supp_type='SMR' AND SUPP_ID IN ( select SITE_ID from supplierdata_ext.ONELINK_SUPPLIER_NETWORK where latest_record='Y' AND PREFERENCE_LEVEL <>'D' ) ) WHERE record_count >1 and row_val=1))supp_smr ON supp_SMR.supp_name = SRC.CAPTURED_GARAGE_NAME LEFT OUTER JOIN (select supp_sk,supp_name,lkp_key from (SELECT supp_sk , supp_name, 'A' AS LKP_KEY FROM ( SELECT sd.supp_sk , sd.supp_name, COUNT (sd.supp_name) OVER (PARTITION BY sd.supp_name) AS record_count FROM cdm_owner.supplier_dim sd WHERE sd.latest_flag = 'Y' AND sd.delete_flag = 'N' and sd.supp_type='NOLS' AND SUPP_ID IN ( select SITE_ID from supplierdata_ext.ONELINK_SUPPLIER_NETWORK where latest_record='Y' AND PREFERENCE_LEVEL <>'D' ) ) WHERE record_count = 1 UNION ALL SELECT supp_sk , supp_name, 'B' AS LKP_KEY FROM ( SELECT sd.supp_sk , sd.supp_name, row_number() over(partition by sd.supp_name order by sd.supp_name) as row_val, COUNT (sd.supp_name) OVER (PARTITION BY sd.supp_name) AS record_count FROM cdm_owner.supplier_dim sd WHERE sd.latest_flag = 'Y' AND sd.delete_flag = 'N' and sd.supp_type='NOLS' AND SUPP_ID IN ( select SITE_ID from supplierdata_ext.ONELINK_SUPPLIER_NETWORK where latest_record='Y' AND PREFERENCE_LEVEL <>'D' ) ) WHERE record_count >1 and row_val=1))supp_nols ON supp_nols.supp_name = SRC.CAPTURED_GARAGE_NAME ORDER BY worksheet_number,vehicle_sk,cd.cust_driver_sk;
+  Output: → dataset_1 (ORA_Ext_Vehicle_Off_Road_Data)
+
+// --- [CUSTOMSTAGE : Ora_StgVehicleOffRoad] [Lines 1249-1364] ---
+  Input: ← dataset_3 (HF_FACT_VOR_DATA) (Link: Load_StgVehicleoffRoad)
+  StageType: OracleConnector
+  Output: → dataset_2 (Ora_StgVehicleOffRoad)
+
+// --- [HASHEDFILESTAGE : HF_FACT_VOR_DATA] [Lines 1366-1373] ---
+  Input: ← dataset_4 (Tfm_LoadRecords) (Link: Load_HFVehicleoffRoad)
+  StageType: CHashedFileStage
+  Link File (Load_HFVehicleoffRoad): HF_FACT_VOR_DATA
+  Link File (Load_StgVehicleoffRoad): HF_FACT_VOR_DATA
+  Output: → dataset_3 (HF_FACT_VOR_DATA)
+
+// --- [TRANSFORMERSTAGE : Tfm_LoadRecords] [Lines 2173-2195] ---
+  Input: ← dataset_1 (ORA_Ext_Vehicle_Off_Road_Data) (Link: Lnk_Vehicle_off_Road_Data)
+  Input: ← dataset_5 (HF_SMR_VEHICLE_DIM) (Link: lkVehicleDim_REg)
+  Stage Variables:
+    StageVar svException = If Lnk_Vehicle_off_Road_Data.SUPP_SK=-99 then -1 Else IF Lnk_Vehicle_off_Road_Data.SUPP_SK=-97  then -1 else 0
+  Constraint (Load_VOR_Exception_File): svException=-1
+  StageType: CTransformerStage
+  Transformations:
+    -- Output: Load_HFVehicleoffRoad --
+    WORKSHEET_NUMBER = Lnk_Vehicle_off_Road_Data.WORKSHEET_NUMBER
+    ORIGINAL_WORKSHEET_NUMBER = Lnk_Vehicle_off_Road_Data.ORIGINAL_WORKSHEET_NUMBER
+    VOR_PROGRESS_SK = Lnk_Vehicle_off_Road_Data.VOR_PROGRESS_SK
+    REGISTERED_CUST_DRIVER_SK = Lnk_Vehicle_off_Road_Data.REGISTERED_CUST_DRIVER_SK
+    VEHICLE_SK = If Lnk_Vehicle_off_Road_Data.VEHICLE_SK=-99 then lkVehicleDim_REg.VEHICLE_SK else Lnk_Vehicle_off_Road_Data.VEHICLE_SK
+    VARIANT_SK = If Lnk_Vehicle_off_Road_Data.VEHICLE_SK=-99 then lkVehicleDim_REg.VARIANT_SK else Lnk_Vehicle_off_Road_Data.VARIANT_SK
+    SUPP_SK = \(20)Lnk_Vehicle_off_Road_Data.SUPP_SK
+    CUSTOMER_SK = Lnk_Vehicle_off_Road_Data.CUSTOMER_SK
+    RENTAL_BOOKING_SK = Lnk_Vehicle_off_Road_Data.RENTAL_BOOKING_SK
+    RENTAL_BOOKING_REFERENCE = Lnk_Vehicle_off_Road_Data.RENTAL_BOOKING_REFERENCE
+    VOR_NOTE_SK = Lnk_Vehicle_off_Road_Data.VOR_NOTE_SK
+    ORIGINAL_APPOINTMENT_DATE_SK = Lnk_Vehicle_off_Road_Data.ORIGINAL_APPOINTMENT_DATE_SK
+    JOB_CLOSED_DATE_SK = Lnk_Vehicle_off_Road_Data.JOB_CLOSED_DATE_SK
+    VOR_PASSED_DATE_SK = Lnk_Vehicle_off_Road_Data.VOR_PASSED_DATE_SK
+    DRIVER_COLLECTION_DATE_SK = Lnk_Vehicle_off_Road_Data.DRIVER_COLLECTION_DATE_SK
+    VOR_REGISTRATION_NUMBER = Lnk_Vehicle_off_Road_Data.VOR_REGISTRATION_NUMBER
+    CAPTURED_GARAGE_NAME = Lnk_Vehicle_off_Road_Data.CAPTURED_GARAGE_NAME
+    CONTACT_DRIVER_NAME = Lnk_Vehicle_off_Road_Data.CONTACT_DRIVER_NAME
+    MILEAGE = Lnk_Vehicle_off_Road_Data.MILEAGE
+    VOR_INCIDENT_SOURCE = Lnk_Vehicle_off_Road_Data.VOR_INCIDENT_SOURCE
+    VOR_WORK = Lnk_Vehicle_off_Road_Data.VOR_WORK
+    CRS_LOG_ID = Lnk_Vehicle_off_Road_Data.CRS_LOG_ID
+    NUMBER_OF_WORKING_DAYS_VOR = Lnk_Vehicle_off_Road_Data.NUMBER_OF_WORKING_DAYS_VOR
+    NUMBER_OF_DAYS_VOR = Lnk_Vehicle_off_Road_Data.NUMBER_OF_DAYS_VOR
+    COMPLETION_TO_COLLECT_DAYS = Lnk_Vehicle_off_Road_Data.COMPLETION_TO_COLLECT_DAYS
+    -- Output: Load_VOR_Exception_File --
+    WORKSHEET_NUMBER = Lnk_Vehicle_off_Road_Data.WORKSHEET_NUMBER
+    ORIGINAL_WORKSHEET_NUMBER = Lnk_Vehicle_off_Road_Data.ORIGINAL_WORKSHEET_NUMBER
+    REGISTRATION_NUMBER = Lnk_Vehicle_off_Road_Data.VOR_REGISTRATION_NUMBER
+    GARAGE_NAME = Lnk_Vehicle_off_Road_Data.CAPTURED_GARAGE_NAME
+    DESCRIPTION = If Lnk_Vehicle_off_Road_Data.SUPP_SK=-99 then 'Unknown' Else 'Duplicates'
+  Output: → dataset_4 (Tfm_LoadRecords)
+
+// --- [HASHEDFILESTAGE : HF_SMR_VEHICLE_DIM] [Lines 3177-3183] ---
+  StageType: CHashedFileStage
+  Transformations:
+    -- Output: lkVehicleDim_REg --
+    REGISTRATION_NO = Lnk_Vehicle_off_Road_Data.VOR_REGISTRATION_NUMBER
+  Link File (lkVehicleDim_REg): HF_SMR_VEHICLE_DIM_REG
+  Output: → dataset_5 (HF_SMR_VEHICLE_DIM)
+
+// --- [SEQFILESTAGE : Supp_VOR_Exception] [Lines 3397-3407] ---
+  Input: ← dataset_4 (Tfm_LoadRecords) (Link: Load_VOR_Exception_File)
+  UnixFormat: 1
+  PipeStage: 0
+  UnicodeBOM: 1
+  UnicodeSwapped: 1
+  WithFilter: 0
+  StageType: CSeqFileStage
+  Link File (Load_VOR_Exception_File): #pSMROutputPath#/#pVOR_Exception_FileName#_#pFiledate#.csv
+  Output: → dataset_6 (Supp_VOR_Exception)
