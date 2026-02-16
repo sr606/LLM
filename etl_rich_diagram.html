@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+mermaid.initialize({
+    startOnLoad: true,
+    theme: "default",
+    flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true
+    }
+});
+</script>
+<style>
+body {
+    font-family: Arial;
+    background-color: #ffffff;
+}
+.mermaid {
+    zoom: 0.9;
+}
+</style>
+</head>
+<body>
+ 
+<h2>ETL Technical Architecture</h2>
+ 
+<div class="mermaid">
+flowchart LR
+
+  subgraph Source_Target
+    ORA_Ext_Vehicle_Off_Road_Data["<b>ORA_Ext_Vehicle_Off_Road_Data</b><br/><i>CUSTOMSTAGE</i>"]
+    Ora_StgVehicleOffRoad["<b>Ora_StgVehicleOffRoad</b><br/><i>CUSTOMSTAGE</i>"]
+  end
+
+  subgraph Intermediate
+    HF_FACT_VOR_DATA["<b>HF_FACT_VOR_DATA</b><br/><i>HASHEDFILESTAGE</i>"]
+    HF_SMR_VEHICLE_DIM["<b>HF_SMR_VEHICLE_DIM</b><br/><i>HASHEDFILESTAGE</i>"]
+  end
+
+  subgraph Transform
+    Tfm_LoadRecords["<b>Tfm_LoadRecords</b><br/><i>TRANSFORMERSTAGE</i>"]
+  end
+
+  subgraph Outputs
+    Supp_VOR_Exception["<b>Supp_VOR_Exception</b><br/><i>SEQFILESTAGE</i>"]
+  end
+
+  ORA_Ext_Vehicle_Off_Road_Data --> Ora_StgVehicleOffRoad
+  Ora_StgVehicleOffRoad --> HF_FACT_VOR_DATA
+  HF_FACT_VOR_DATA --> Tfm_LoadRecords
+  Tfm_LoadRecords --> HF_SMR_VEHICLE_DIM
+  HF_SMR_VEHICLE_DIM --> Supp_VOR_Exception
+</div>
+ 
+</body>
+</html>
